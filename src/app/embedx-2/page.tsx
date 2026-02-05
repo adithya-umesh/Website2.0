@@ -343,13 +343,7 @@ export default function Page() {
                           </div>
                         </div>
                       </div>
-                      {/* Evaluation & Submission Guidelines */}
-                      <div className="mb-16">
-                        <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/60 border border-gray-500/30 rounded-xl p-8 shadow-lg flex flex-col h-full">
-                          <h2 className="text-2xl font-bold text-orange-300 mb-2">Evaluation & Submission Guidelines</h2>
-                          <p className="text-gray-300">All submissions will be evaluated based on innovation, technical feasibility, scalability, and presentation. Ensure your documentation is clear and your solution is well-demonstrated. Submission instructions and deadlines will be announced during the event. Late or incomplete submissions will not be considered for evaluation.</p>
-                        </div>
-                      </div>
+                      {/* Removed Evaluation & Submission Guidelines section as requested */}
                       {/* Register Button */}
                       <div className="flex justify-center mb-20">
                         <button

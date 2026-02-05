@@ -32,7 +32,7 @@ export default function HomePage() {
       className="relative"
     >
       <Navigation />
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-4xl mx-auto px-2">
         <HeroSection />
         <ScrollingSection />
       </div>
