@@ -69,6 +69,7 @@ export async function POST(req: Request) {
       }
     }
 
+    // Save all form data as JSON in the embedx2 bucket (bucket only, not table)
     const payload: any = {
       team_name: teamName,
       leader_name: teamLeader,
@@ -80,40 +81,18 @@ export async function POST(req: Request) {
     }
 
     try {
-      const { data, error } = await supabaseAdmin
-        .from('embedx2_registrations')
-        .insert([payload])
-        .select()
-
-      if (error) {
-        const code = (error as any)?.code
-        if (code === 'PGRST205') {
-          return NextResponse.json({
-            error: 'DB insert failed - table missing',
-            details: error,
-            action: 'Create the table "embedx2_registrations" in Supabase with columns team_name, leader_name, leader_email, leader_phone, campus, members (jsonb).'
-          }, { status: 500 })
-        }
-
-        return NextResponse.json({ error: 'DB insert failed', details: error }, { status: 500 })
+      const jsonFileName = `${teamName.replace(/\s+/g, '_')}_details.json`;
+      const jsonBuffer = Buffer.from(JSON.stringify(payload, null, 2));
+      // Upload JSON file to the embedx2 bucket
+      const { error: jsonUploadError } = await supabaseAdmin.storage.from('embedx2').upload(jsonFileName, jsonBuffer, { upsert: true, contentType: 'application/json' });
+      if (jsonUploadError) {
+        console.warn('Failed to upload team details JSON to bucket:', jsonUploadError);
+        return NextResponse.json({ error: 'Failed to upload registration JSON', details: jsonUploadError }, { status: 500 });
       }
-
-      // Save registration as a JSON file in the embedx2 bucket in Supabase Storage
-      try {
-        const jsonFileName = `${teamName.replace(/\s+/g, '_')}_details.json`;
-        const jsonBuffer = Buffer.from(JSON.stringify(payload, null, 2));
-        // Upload JSON file to the same bucket as payments
-        const { error: jsonUploadError } = await supabaseAdmin.storage.from('embedx2').upload(jsonFileName, jsonBuffer, { upsert: true, contentType: 'application/json' });
-        if (jsonUploadError) {
-          console.warn('Failed to upload team details JSON to bucket:', jsonUploadError);
-        }
-      } catch (fileErr) {
-        console.warn('Failed to upload registration JSON file:', fileErr);
-      }
-      return NextResponse.json({ success: true, data: data?.[0] })
-    } catch (dbErr) {
-      console.error('Unexpected DB error:', dbErr)
-      return NextResponse.json({ error: 'Unexpected DB error', details: String(dbErr) }, { status: 500 })
+      return NextResponse.json({ success: true });
+    } catch (fileErr) {
+      console.warn('Failed to upload registration JSON file:', fileErr);
+      return NextResponse.json({ error: 'Failed to upload registration JSON file', details: String(fileErr) }, { status: 500 });
     }
   } catch (err) {
     console.error(err)

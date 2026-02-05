@@ -1,5 +1,5 @@
-import AdminEmbedx2Page from './embedx2/page';
 
 export default function AdminRoot() {
-  return <AdminEmbedx2Page />;
+  // Disabled: always return 404
+  return <div style={{textAlign:'center',marginTop:'4rem',fontSize:'2rem'}}>404 | Not Found</div>;
 }
