@@ -54,15 +54,16 @@ export async function POST(req: Request) {
 
     if (Array.isArray(members)) {
       for (let i = 0; i < members.length; i++) {
-        const m = members[i] as any
-        if (!m) continue
-        const paymentObj = (m.payment as any) || (m.paymentDataUrl ? { name: m.paymentName || `payment_${i+1}`, data: m.paymentDataUrl } : null)
-        if (paymentObj && paymentObj.data) {
+        const m = members[i] as any;
+        if (!m) continue;
+        // Only upload if payment_url is not already set and paymentDataUrl exists
+        if (!m.payment_url && m.paymentDataUrl) {
           try {
-            const uploaded = await uploadBase64('embedx2', `${teamName}_payment_member${i+1}`, paymentObj)
-            m.payment_url = uploaded
+            const paymentObj = { name: m.paymentName || `payment_${i+1}`, data: m.paymentDataUrl };
+            const uploaded = await uploadBase64('embedx2', `${teamName}_payment_member${i+1}`, paymentObj);
+            m.payment_url = uploaded;
           } catch (e) {
-            console.warn(`Failed to upload payment for member ${i+1}:`, e)
+            console.warn(`Failed to upload payment for member ${i+1}:`, e);
           }
         }
       }
@@ -75,6 +76,7 @@ export async function POST(req: Request) {
       leader_phone: phone,
       campus: campus || null,
       members: members || [],
+      created_at: new Date().toISOString(),
     }
 
     try {
