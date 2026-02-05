@@ -98,16 +98,17 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'DB insert failed', details: error }, { status: 500 })
       }
 
-      // Save registration as a JSON file in /data/embedx2_registrations
+      // Save registration as a JSON file in the embedx2 bucket in Supabase Storage
       try {
-        const fs = require('fs');
-        const path = require('path');
-        const outDir = path.join(process.cwd(), 'data', 'embedx2_registrations');
-        if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
-        const fileName = `${teamName.replace(/\s+/g, '_')}_${Date.now()}.json`;
-        fs.writeFileSync(path.join(outDir, fileName), JSON.stringify(payload, null, 2));
+        const jsonFileName = `${teamName.replace(/\s+/g, '_')}_details.json`;
+        const jsonBuffer = Buffer.from(JSON.stringify(payload, null, 2));
+        // Upload JSON file to the same bucket as payments
+        const { error: jsonUploadError } = await supabaseAdmin.storage.from('embedx2').upload(jsonFileName, jsonBuffer, { upsert: true, contentType: 'application/json' });
+        if (jsonUploadError) {
+          console.warn('Failed to upload team details JSON to bucket:', jsonUploadError);
+        }
       } catch (fileErr) {
-        console.warn('Failed to write registration JSON file:', fileErr);
+        console.warn('Failed to upload registration JSON file:', fileErr);
       }
       return NextResponse.json({ success: true, data: data?.[0] })
     } catch (dbErr) {
