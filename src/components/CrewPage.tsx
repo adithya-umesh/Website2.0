@@ -1,0 +1,587 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import Image, { type StaticImageData } from 'next/image'
+import { useInView } from 'react-intersection-observer'
+import Navigation from './Navigation'
+import Link from 'next/link'
+import { getTeamMembers, TeamMember } from '@/lib/supabase'
+// Import crew images so the bundler serves them (files live in src/lib/crewimg)
+import IMG_Bhuvi from '@/lib/crewimg/Bhuvi Bagga.jpeg'
+import IMG_Ankush from '@/lib/crewimg/Ankush.jpg'
+import IMG_Tanisha from '@/lib/crewimg/Tanisha Reddy.jpeg'
+import IMG_Tvisha from '@/lib/crewimg/Tvisha.png'
+import IMG_Srijan from '@/lib/crewimg/Srijan.png'
+import IMG_Arun from '@/lib/crewimg/Arun.jpg'
+import IMG_Sid from '@/lib/crewimg/Sid.png'
+import IMG_Ragul from '@/lib/crewimg/Ragul Rajkumar.jpeg'
+import IMG_ShreyaRevankar from '@/lib/crewimg/Shreya Revankar.jpg'
+import IMG_Naveen from '@/lib/crewimg/Naveen Selvaraj.jpg'
+import IMG_Dhruv from '@/lib/crewimg/Dhruv Maheshwari.jpg'
+import IMG_Abhigyan from '@/lib/crewimg/Abhigyan.jpg'
+import IMG_Aarush from '@/lib/crewimg/Aarush khullar.jpg'
+import IMG_Yadunandan from '@/lib/crewimg/Yadunandan.jpg'
+import IMG_Bhuvigna from '@/lib/crewimg/Bhuvigna Reddy.jpg'
+import IMG_Miruthulaa from '@/lib/crewimg/Miruthulaa.jpg'
+import IMG_Hita from '@/lib/crewimg/Hita Shree.jpg'
+import IMG_Architha from '@/lib/crewimg/Architha SP.jpg'
+import IMG_Nitya from '@/lib/crewimg/Nitya Kushwaha.jpg'
+import IMG_Shibu from '@/lib/crewimg/Shibu.jpg'
+import IMG_Moorty from '@/lib/crewimg/Moorty.jpg'
+import IMG_Keshav from '@/lib/crewimg/Keshav.jpg'
+import IMG_Sharanya from '@/lib/crewimg/Sharanya.jpg'
+import IMG_Manish from '@/lib/crewimg/Manish.png'
+import IMG_Karan from '@/lib/crewimg/Karan.jpg'
+import IMG_Ankit from '@/lib/crewimg/Ankit Bembalgi.jpg'
+import IMG_Vinay from '@/lib/crewimg/Vinay Dasari.jpg'
+import IMG_Swetha from '@/lib/crewimg/Swetha.png'
+import IMG_Ram from '@/lib/crewimg/Ram Prakhyath.png'
+import IMG_Bhumika from '@/lib/crewimg/Bhumika.jpg'
+import IMG_Alan from '@/lib/crewimg/Alan.jpeg'
+import IMG_Anantha from '@/lib/crewimg/Anantha.jpeg'
+import IMG_Harshith from '@/lib/crewimg/Harshith.jpg'
+import IMG_Karthik from '@/lib/crewimg/Karthik.jpg'
+import IMG_Mancirat from '@/lib/crewimg/Mancirat.jpeg'
+import IMG_VinaySimple from '@/lib/crewimg/Vinay.jpg'
+import IMG_Kethan from '@/lib/crewimg/kethan.jpg'
+
+const domainColors = {
+  Automotive: 'from-orange-500 to-red-600',
+  Robotics: 'from-orange-500 to-red-600',
+  Design: 'from-orange-500 to-red-600',
+  Media: 'from-orange-500 to-red-600',
+  Marketing: 'from-purple-500 to-indigo-600',
+  Sponsorships: 'from-yellow-500 to-orange-600',
+  Operations: 'from-blue-500 to-cyan-600',
+  Logistics: 'from-green-500 to-lime-600',
+  Programming: 'from-pink-500 to-fuchsia-600',
+  '3D Space': 'from-indigo-500 to-purple-600',
+}
+
+const crewImages: Record<string, StaticImageData | string> = {
+  'Karan Maheshwari': IMG_Karan,
+  'Bhuvi Bagga': IMG_Bhuvi,
+  'Velkur Tanisha Reddy': IMG_Tanisha,
+  'Naveen S': IMG_Naveen,
+  'Dhruv Maheshwari': IMG_Dhruv,
+  'Siddharth Shilin': IMG_Sid,
+  'Maniish Rajendran': IMG_Manish,
+  'Ankush Gowda': IMG_Ankush,
+  'Tvisha': IMG_Tvisha,
+  'Srijan Das': IMG_Srijan,
+  'Arun Murugappan I': IMG_Arun,
+  'Ragul Rajkumar': IMG_Ragul,
+  'Shreya Revankar': IMG_ShreyaRevankar,
+  'Abhigyan': IMG_Abhigyan,
+  'Aarush Khullar': IMG_Aarush,
+  'Yadunandana Reddy M': IMG_Yadunandan,
+  'Bhuvigna Reddy A T': IMG_Bhuvigna,
+  'Miruthulaa E M': IMG_Miruthulaa,
+  'Hitha Shree Suresh': IMG_Hita,
+  'Architha': IMG_Architha,
+  'Nitya Kushwaha': IMG_Nitya,
+  'Shibu Rangarajan': IMG_Shibu,
+  'Moorty Perepa': IMG_Moorty,
+  'Keshav': IMG_Keshav,
+  'Sharanya N': IMG_Sharanya,
+  'Sharanya': IMG_Sharanya,
+  'Ankit Bembalgi': IMG_Ankit,
+  'Vinay Dasari': IMG_Vinay,
+  'Vinay': IMG_VinaySimple,
+  'Alan G Lal': IMG_Alan,
+  'Anantha Krishnan': IMG_Anantha,
+  'HARSHITH R': IMG_Harshith,
+  'Karthik': IMG_Karthik,
+  'Mancirat Singh': IMG_Mancirat,
+  'Kethan K B': IMG_Kethan,
+  'Swetha Ranganathan': IMG_Swetha,
+  'Ram Prakhyath': IMG_Ram,
+  'Bhumika': IMG_Bhumika,
+}
+
+// Map normalized filenames (lowercased) to imported assets
+const crewAssetByFile: Record<string, StaticImageData> = {
+  'tvisha.jpg': IMG_Tvisha,
+  'srijan.jpg': IMG_Srijan,
+  'arun.jpg': IMG_Arun,
+  'ragul rajkumar.jpeg': IMG_Ragul,
+  'shreya revankar.jpg': IMG_ShreyaRevankar,
+  'bhuvi bagga.jpeg': IMG_Bhuvi,
+  'tanisha reddy.jpeg': IMG_Tanisha,
+  'naveen selvaraj.jpg': IMG_Naveen,
+  'dhruv maheshwari.jpg': IMG_Dhruv,
+  'abhigyan.jpg': IMG_Abhigyan,
+  'aarush khullar.jpg': IMG_Aarush,
+  'yadunandan reddy.jpg': IMG_Yadunandan,
+  'bhuvigna reddy.jpg': IMG_Bhuvigna,
+  'miruthulaa.jpg': IMG_Miruthulaa,
+  'hita shree.jpg': IMG_Hita,
+  'architha sp.jpg': IMG_Architha,
+  'nitya kushwaha.jpg': IMG_Nitya,
+  'shibu.jpg': IMG_Shibu,
+  'moorty.jpg': IMG_Moorty,
+  'keshav.jpg': IMG_Keshav,
+  'sharanya n.jpg': IMG_Sharanya,
+  'sharanya.jpg': IMG_Sharanya,
+  'karan.jpg': IMG_Karan,
+  'ankush.jpg': IMG_Ankush,
+  'sid.png': IMG_Sid,
+  'manish.png': IMG_Manish,
+  'ankit bembalgi.jpg': IMG_Ankit,
+  'vinay dasari.jpg': IMG_Vinay,
+  'vinay.jpg': IMG_VinaySimple,
+  'alan.jpeg': IMG_Alan,
+  'anantha.jpeg': IMG_Anantha,
+  'harshith.jpg': IMG_Harshith,
+  'karthik.jpg': IMG_Karthik,
+  'mancirat.jpeg': IMG_Mancirat,
+  'kethan.jpg': IMG_Kethan,
+  'swetha.png': IMG_Swetha,
+  'ram prakhyath.png': IMG_Ram,
+  'bhumika.jpg': IMG_Bhumika,
+}
+
+function resolveMemberImage(member: TeamMember): StaticImageData | string {
+  // Try to match by provided photo_url filename (case-insensitive)
+  const filename = member.photo_url ? member.photo_url.split('/').pop()?.toLowerCase() : undefined
+  if (filename && crewAssetByFile[filename]) {
+    return crewAssetByFile[filename]
+  }
+  // Fallback by name mapping
+  const byName = crewImages[member.name]
+  if (byName) return byName
+  // Final fallback
+  return '/images/Logo.png'
+}
+
+export default function CrewPage() {
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
+  const [loading, setLoading] = useState(false) // Changed to false so page shows immediately
+  const [headerRef, headerInView] = useInView({ triggerOnce: true, threshold: 0.1 })
+  const [isCrewPage, setIsCrewPage] = useState(false)
+
+  useEffect(() => {
+    // Route detection for animation disabling
+    setIsCrewPage(window.location.pathname.startsWith('/crew'))
+  }, [])
+
+  useEffect(() => {
+    async function fetchTeamMembers() {
+      try {
+        const members = await getTeamMembers()
+        setTeamMembers(members)
+      } catch (error) {
+        console.error('Error fetching team members:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchTeamMembers()
+  }, [])
+
+  // Segregation logic: keep a controlled list of core roles; everything else (except legacy/new recruits)
+  // will be presented under Crew so custom titles (e.g. 'Robotics', 'Automotives') show up as tiles.
+  const coreRoles = [
+    'Club Head',
+    'Design Head',
+    'Legacy Core',
+    'Club Manager',
+    'Social Media Head',
+    'Automotive Head',
+    'Operations Head'
+  ]
+
+  const oldCrewRoles = ['Club Head 25', 'Old Crew', 'Core 2019 - 2023', 'Head of Go-karting', "Core’25", 'Core 21-23']
+
+  const coreMembers = teamMembers.filter(m => coreRoles.includes(m.role))
+  // Treat as crew any member who is not core, not a legacy entry, and not a new recruit
+  const crewMembers = teamMembers.filter(m => !coreRoles.includes(m.role) && !oldCrewRoles.includes(m.role) && m.role !== 'New Recruit')
+  const newRecruits = teamMembers.filter(m => m.role === 'New Recruit')
+  const oldCrew = teamMembers.filter(m => oldCrewRoles.includes(m.role))
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-black flex items-center justify-center">
+        <Navigation />
+        <div className="text-center">
+          <div className="animate-spin w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading team members...</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-black">
+      <Navigation />
+      
+      {/* Enhanced Hero Section with Racing Theme */}
+  <section ref={headerRef} className="pt-8 pb-8 px-4 relative overflow-hidden mb-0">
+        {/* Racing grid background */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="grid grid-cols-12 grid-rows-8 h-full w-full">
+            {[...Array(96)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="border border-orange-400/30"
+                animate={{ 
+                  opacity: [0.1, 0.4, 0.1]
+                }}
+                transition={{ 
+                  duration: 3, 
+                  delay: i * 0.03,
+                  repeat: Infinity 
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Speed lines */}
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(5)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-full h-0.5 bg-gradient-to-r from-transparent via-orange-400/30 to-transparent"
+              style={{ top: `${20 + i * 15}%` }}
+              initial={{ x: '-100%' }}
+              animate={{ x: '100%' }}
+              transition={{
+                duration: 2,
+                delay: i * 0.3,
+                repeat: Infinity,
+                repeatDelay: 3
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="max-w-6xl mx-auto text-center relative z-10">
+          <motion.h1
+            initial={{ opacity: 0, y: 50 }}
+            animate={headerInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8 }}
+            className="text-5xl md:text-7xl font-bold text-white mb-8 relative"
+            style={{
+              textShadow: '0 0 20px rgba(249, 115, 22, 0.6), 0 0 40px rgba(249, 115, 22, 0.4)'
+            }}
+          >
+            Meet The{' '}
+            <motion.span 
+              className="text-transparent bg-clip-text bg-gradient-orange relative inline-block"
+              whileHover={{ scale: 1.04 }}
+              animate={{ scale: [1, 1.02, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              Crew
+              {/* Holographic scan effect */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-400/40 to-transparent"
+                initial={{ x: '-100%' }}
+                animate={{ x: '100%' }}
+                transition={{ 
+                  duration: 5, 
+                  repeat: Infinity,
+                  repeatDelay: 3,
+                  ease: 'linear'
+                }}
+                style={{ willChange: 'transform' }}
+              />
+            </motion.span>
+
+            {/* Floating tech elements - disabled on /crew for performance */}
+            {isCrewPage ? (
+              // Static gear emoji on /crew
+              <div className="absolute -top-6 -right-6 text-3xl opacity-60">
+                ⚙️
+              </div>
+            ) : (
+              // Animated gear emoji on other pages
+              <motion.div
+                className="absolute -top-6 -right-6 text-3xl opacity-60"
+                animate={{ 
+                  rotate: 360,
+                  y: [-10, 10, -10]
+                }}
+                transition={{ 
+                  rotate: { duration: 15, repeat: Infinity, ease: "linear" },
+                  y: { duration: 3, repeat: Infinity }
+                }}
+              >
+                ⚙️
+              </motion.div>
+            )}
+            
+            {isCrewPage ? (
+              // Static robot emoji on /crew
+              <div className="absolute -bottom-6 -left-6 text-3xl opacity-60">
+                🤖
+              </div>
+            ) : (
+              // Animated robot emoji on other pages
+              <motion.div
+                className="absolute -bottom-6 -left-6 text-3xl opacity-60"
+                animate={{ 
+                  rotate: -360,
+                  x: [-8, 8, -8]
+                }}
+                transition={{ 
+                  rotate: { duration: 12, repeat: Infinity, ease: "linear" },
+                  x: { duration: 2, repeat: Infinity }
+                }}
+              >
+                🤖
+              </motion.div>
+            )}
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={headerInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-12"
+          >
+            Our diverse team of passionate{' '}
+            <motion.span 
+              className="text-orange-400 font-semibold"
+              whileHover={{ 
+                textShadow: '0 0 10px rgba(251, 146, 60, 0.8)',
+                scale: 1.05
+              }}
+            >
+              engineers, designers, and innovators
+            </motion.span>
+            {' '}who make Vegavath a hub of creativity and technical excellence.
+          </motion.p>
+        </div>
+      </section>
+
+  {/* Segregated Crew Sections */}
+  <section className="pb-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          {coreMembers.length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold text-orange-400 mb-6">Core</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {coreMembers.map((member, index) => (
+                  <CrewCard key={member.id} member={member} index={index} />
+                ))}
+              </div>
+            </div>
+          )}
+          {crewMembers.length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold text-orange-400 mb-6">Crew</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {crewMembers.map((member, index) => (
+                  <CrewCard key={member.id} member={member} index={index} />
+                ))}
+              </div>
+            </div>
+          )}
+          {newRecruits.length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold text-orange-400 mb-6">New Recruits</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {newRecruits.map((member, index) => (
+                  <CrewCard key={member.id} member={member} index={index} />
+                ))}
+              </div>
+            </div>
+          )}
+          {oldCrew.length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold text-orange-400 mb-6">Legacy Crew</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {oldCrew.map((member, index) => (
+                  <CrewCard key={member.id} member={member} index={index} />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Join the Team CTA */}
+      <section className="py-20 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-4xl font-bold text-white mb-8"
+          >
+            Want to{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-orange">
+              Join Our Crew?
+            </span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="text-xl text-gray-300 mb-12"
+          >
+            We&apos;re always looking for passionate individuals who want to make an impact. 
+            Join us and be part of something extraordinary.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <Link href="/join">
+              <button className="group relative px-8 py-4 bg-gradient-orange text-white font-semibold rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/25">
+                <span className="relative z-10">Apply Now</span>
+                <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+              </button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+    </div>
+  )
+}
+
+function CrewCard({ member, index }: { member: TeamMember, index: number }) {
+  const [imgError, setImgError] = useState(false)
+  const imgSrc = resolveMemberImage(member)
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -50 }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      className="group bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl overflow-hidden hover:border-orange-500/50 relative transform transition-transform duration-300 ease-out hover:scale-105 hover:-translate-y-2"
+      style={{ willChange: 'transform' }}
+    >
+      {/* Racing stripe accent */}
+      <motion.div
+        className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-red-500"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 0.8, delay: index * 0.1 + 0.3 }}
+      />
+      {/* Enhanced Profile Image - 1:1 Aspect Ratio */}
+      <div className="relative bg-gray-800 overflow-hidden pt-4 pr-4" style={{ aspectRatio: '1 / 1' }}>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
+        {/* Holographic grid overlay */}
+        <div className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity z-5">
+          <div className="grid grid-cols-8 grid-rows-8 h-full w-full">
+            {[...Array(64)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="border border-orange-400/30"
+                animate={{ opacity: [0.1, 0.5, 0.1] }}
+                transition={{ duration: 2, delay: i * 0.02, repeat: Infinity }}
+              />
+            ))}
+          </div>
+        </div>
+        {!imgError ? (
+          <Image
+            src={imgSrc}
+            alt={member.name}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover object-center z-0"
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            onError={() => setImgError(true)}
+            priority={index < 6}
+          />
+        ) : (
+          <div className="w-full h-full bg-gray-700 flex items-center justify-center relative z-0" style={{ aspectRatio: '1 / 1' }}>
+            <motion.span 
+              className="text-gray-500 text-sm group-hover:text-gray-400 transition-colors"
+              whileHover={{ scale: 1.1 }}
+            >
+              📸 Photo Coming Soon
+            </motion.span>
+          </div>
+        )}
+        {/* Speed lines on hover */}
+        <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+          {[...Array(3)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="w-8 h-0.5 bg-orange-400 rounded-full mb-1"
+              animate={{ opacity: [0, 1, 0], x: [0, 15, 0] }}
+              transition={{ duration: 1, delay: i * 0.1, repeat: Infinity, repeatDelay: 1 }}
+            />
+          ))}
+        </div>
+      </div>
+      {/* Enhanced Member Info */}
+      <div className="p-6 relative">
+        {/* Tech pattern background */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="grid grid-cols-6 grid-rows-4 h-full w-full">
+            {[...Array(24)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="border border-orange-400/20"
+                animate={{ opacity: [0.1, 0.3, 0.1] }}
+                transition={{ duration: 3, delay: i * 0.1, repeat: Infinity }}
+              />
+            ))}
+          </div>
+        </div>
+        <h3 className="text-xl font-bold text-white mb-2 relative z-10 transition-transform duration-200 group-hover:translate-x-1">
+          {member.name === 'Siddharth Shilin' ? 'Siddharth Shilin' : member.name}
+        </h3>
+        <p className="text-orange-500 font-medium mb-3 relative z-10 transition-transform duration-200 group-hover:translate-x-1">
+          {member.role}
+        </p>
+        <p className="text-gray-400 text-sm leading-relaxed relative z-10 group-hover:text-gray-300 transition-colors transition-transform duration-200 group-hover:translate-x-1">
+          {member.name && member.name.includes('Karan') ? 'Life never gives you lemons, it only gives Pain' : member.bio}
+        </p>
+        {/* Enhanced Social Links */}
+        <div className="flex space-x-3 mt-4 relative z-10">
+          {member.linkedin_url && (
+            <a
+              href={member.linkedin_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 hover:text-orange-500 hover:bg-gray-700 transition-transform duration-200 relative overflow-hidden group/link"
+            >
+              <svg className="w-5 h-5 relative z-10" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              
+              {/* Holographic border */}
+              <div
+                className="absolute inset-0 border border-orange-400/0 rounded-lg transition-colors duration-200"
+              />
+            </a>
+          )}
+          
+          {member.github_url && (
+            <a
+              href={member.github_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-700 transition-transform duration-200 relative overflow-hidden group/link"
+            >
+              <svg className="w-5 h-5 relative z-10" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              
+              {/* Holographic border */}
+              <div
+                className="absolute inset-0 border border-gray-400/0 rounded-lg transition-colors duration-200"
+              />
+            </a>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
