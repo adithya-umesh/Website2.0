@@ -168,7 +168,7 @@ export default function ScrollingSection() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={aboutInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 text-center"
+            className="grid grid-cols-1 md:grid-cols-3 gap-10 items-stretch text-center"
           >
             <div className="space-y-2">
               <div className="text-3xl font-bold text-primary-orange font-heading">85</div>
@@ -294,7 +294,7 @@ export default function ScrollingSection() {
               Thank you to all participants who made this event a success!
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-stretch mb-12">
               <div className="bg-gradient-to-br from-gray-900/50 to-gray-800/50 p-6 rounded-xl border border-gray-500/30">
                 <div className="text-3xl mb-3">✅</div>
                 <h3 className="text-lg font-semibold text-gray-400 mb-2">Status</h3>

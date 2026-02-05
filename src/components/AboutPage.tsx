@@ -59,7 +59,7 @@ export default function AboutPage() {
       <Navigation />
       
       {/* Enhanced Hero Section with Racing Elements */}
-      <section className="pt-20 pb-16 px-4 relative overflow-hidden">
+      <section className="pt-24 pb-20 px-4 relative overflow-hidden">
         {/* Racing circuit background */}
         <div className="absolute inset-0 opacity-10">
           <svg viewBox="0 0 1200 400" className="w-full h-full">
@@ -81,7 +81,7 @@ export default function AboutPage() {
           </svg>
         </div>
 
-        <div className="max-w-6xl mx-auto text-center relative z-10">
+        <div className="max-w-7xl mx-auto text-center relative z-10">
           {/* Site maintenance overlay (client) */}
           {/* dynamically renders only when the admin flags the page */}
           {/* lazy-load to avoid SSR imports */}

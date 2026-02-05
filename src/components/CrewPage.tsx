@@ -359,12 +359,12 @@ export default function CrewPage() {
       </section>
 
   {/* Segregated Crew Sections */}
-  <section className="pb-20 px-4">
-        <div className="max-w-6xl mx-auto">
+    <section className="pb-24 px-4">
+      <div className="max-w-7xl mx-auto">
           {coreMembers.length > 0 && (
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-orange-400 mb-6">Core</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 items-stretch">
                 {coreMembers.map((member, index) => (
                   <CrewCard key={member.id} member={member} index={index} />
                 ))}
@@ -374,7 +374,7 @@ export default function CrewPage() {
           {crewMembers.length > 0 && (
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-orange-400 mb-6">Crew</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 items-stretch">
                 {crewMembers.map((member, index) => (
                   <CrewCard key={member.id} member={member} index={index} />
                 ))}
@@ -384,7 +384,7 @@ export default function CrewPage() {
           {newRecruits.length > 0 && (
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-orange-400 mb-6">New Recruits</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 items-stretch">
                 {newRecruits.map((member, index) => (
                   <CrewCard key={member.id} member={member} index={index} />
                 ))}
@@ -394,7 +394,7 @@ export default function CrewPage() {
           {oldCrew.length > 0 && (
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-orange-400 mb-6">Legacy Crew</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 items-stretch">
                 {oldCrew.map((member, index) => (
                   <CrewCard key={member.id} member={member} index={index} />
                 ))}

@@ -243,14 +243,14 @@ export default function GalleryPage() {
       </section>
 
       {/* Gallery Grid Organized by Event */}
-      <section className="py-12 px-4 relative">
+      <section className="py-16 px-4 relative">
         {/* Background ambient effects */}
         <div className="absolute inset-0 opacity-5 pointer-events-none">
           <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-orange-500/30 rounded-full blur-3xl"></div>
         </div>
 
-        <div className="max-w-6xl mx-auto relative z-10">
+        <div className="max-w-7xl mx-auto relative z-10">
           {filteredEvents.length === 0 ? (
             <div className="text-center py-24">
               <motion.p
@@ -263,7 +263,7 @@ export default function GalleryPage() {
               </motion.p>
             </div>
           ) : (
-            <motion.div layout className="space-y-16">
+            <motion.div layout className="space-y-20">
               {filteredEvents.map((eventData, eventIndex) => (
                 <motion.div
                   key={eventData.eventName}
@@ -295,7 +295,7 @@ export default function GalleryPage() {
                   {/* Grid Layout */}
                   <motion.div
                     layout
-                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 items-stretch"
                   >
                     {/* Empty state for events with no images (e.g., EmbedX 2.0) */}
                     {eventData.items.length === 0 && (
@@ -334,11 +334,11 @@ export default function GalleryPage() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -30 }}
                           transition={{ duration: 0.5, delay: index * 0.08 }}
-                          className="group cursor-pointer flex flex-col gap-4"
+                          className="group cursor-pointer flex flex-col gap-6 h-full"
                           onClick={() => openLightbox(item)}
                         >
                           {/* Media Container */}
-                          <div className="relative w-full rounded-xl overflow-hidden aspect-video shadow-lg shadow-black/30">
+                          <div className="relative w-full rounded-xl overflow-hidden aspect-video shadow-lg shadow-black/30 flex-shrink-0">
                             {item.image_url ? (
                               <>
                                 {item.media_type === 'video' ? (
@@ -475,7 +475,7 @@ export default function GalleryPage() {
               </div>
 
               {/* Details */}
-              <div className="p-6 bg-gray-900/80 backdrop-blur-sm border-t border-gray-700/50">
+              <div className="p-8 bg-gray-900/80 backdrop-blur-sm border-t border-gray-700/50">
                 <div className="flex items-center justify-between mb-4">
                   <span className="px-3 py-1 rounded-full text-sm font-medium bg-orange-500/20 text-orange-400">
                     {selectedItem.event_name}

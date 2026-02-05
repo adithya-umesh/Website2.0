@@ -23,31 +23,19 @@ import Navigation from './Navigation'
  */
 
 export default function HomePage() {
-  // Loading animation disabled for performance
-  const [isLoading, setIsLoading] = useState(false)
-
-  // Loading screen permanently disabled - removed for better performance
-  // Original loading logic commented out to prevent lag with additional features
-
   return (
-    <>
-      <AnimatePresence mode="wait">
-        {isLoading ? (
-          <LoadingScreen key="loading" />
-        ) : (
-          <motion.div
-            key="main"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="relative"
-          >
-            <Navigation />
-            <HeroSection />
-            <ScrollingSection />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+    <motion.div
+      key="main"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="relative"
+    >
+      <Navigation />
+      <div className="max-w-7xl mx-auto px-4">
+        <HeroSection />
+        <ScrollingSection />
+      </div>
+    </motion.div>
   )
 }
