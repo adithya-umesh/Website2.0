@@ -96,6 +96,17 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'DB insert failed', details: error }, { status: 500 })
       }
 
+      // Save registration as a JSON file in /data/embedx2_registrations
+      try {
+        const fs = require('fs');
+        const path = require('path');
+        const outDir = path.join(process.cwd(), 'data', 'embedx2_registrations');
+        if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+        const fileName = `${teamName.replace(/\s+/g, '_')}_${Date.now()}.json`;
+        fs.writeFileSync(path.join(outDir, fileName), JSON.stringify(payload, null, 2));
+      } catch (fileErr) {
+        console.warn('Failed to write registration JSON file:', fileErr);
+      }
       return NextResponse.json({ success: true, data: data?.[0] })
     } catch (dbErr) {
       console.error('Unexpected DB error:', dbErr)
