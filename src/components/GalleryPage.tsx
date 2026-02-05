@@ -457,6 +457,7 @@ export default function GalleryPage() {
                     <img
                       src={selectedItem.image_url}
                       alt={selectedItem.caption || 'Full resolution'}
+                      loading="lazy"
                       className="w-full h-full object-contain"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;

@@ -496,6 +496,7 @@ function CrewCard({ member, index }: { member: TeamMember, index: number }) {
             style={{ objectFit: 'cover', objectPosition: 'center' }}
             onError={() => setImgError(true)}
             priority={index < 6}
+            loading={index < 6 ? 'eager' : 'lazy'}
           />
         ) : (
           <div className="w-full h-full bg-gray-700 flex items-center justify-center relative z-0" style={{ aspectRatio: '1 / 1' }}>

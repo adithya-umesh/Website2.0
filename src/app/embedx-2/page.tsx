@@ -222,58 +222,94 @@ export default function EmbedX2Page() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/30 rounded-lg p-6 text-center">
-            <div className="text-3xl mb-3">🚀</div>
-            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
-              Registrations Opening Soon
-            </h2>
-            <p className="text-gray-300 text-sm sm:text-base">
-              Stay tuned for updates on registration dates, event schedule, and exciting challenges.
-            </p>
-          </div>
 
-          <div className="mt-12 flex items-center justify-between gap-4">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white">
-              What to Expect
-            </h2>
-            <button
-              onClick={() => {
-                setShowForm(true)
-                setTimeout(() => document.getElementById('register')?.scrollIntoView({ behavior: 'smooth' }), 100)
-              }}
-              className="px-5 py-2.5 bg-gradient-orange text-white rounded-lg text-sm font-semibold hover:scale-105 transition-transform duration-300"
-            >
-              Register Now
-            </button>
-          </div>
-
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-gray-900/30 border border-gray-700/40 rounded-lg p-5">
-              <div className="text-3xl mb-3">⚡</div>
-              <h3 className="text-lg font-semibold text-white mb-2">Hands-on Projects</h3>
-              <p className="text-gray-400 text-sm">
-                Work on real embedded systems and hardware challenges
-              </p>
-            </div>
-
-            <div className="bg-gray-900/30 border border-gray-700/40 rounded-lg p-5">
-              <div className="text-3xl mb-3">🤝</div>
-              <h3 className="text-lg font-semibold text-white mb-2">Team Collaboration</h3>
-              <p className="text-gray-400 text-sm">
-                Connect with fellow makers and build together
-              </p>
-            </div>
-
-            <div className="bg-gray-900/30 border border-gray-700/40 rounded-lg p-5">
-              <div className="text-3xl mb-3">🏆</div>
-              <h3 className="text-lg font-semibold text-white mb-2">Exciting Prizes</h3>
-              <p className="text-gray-400 text-sm">
-                Compete for amazing rewards and recognition
-              </p>
-            </div>
-          </div>
         </div>
       </div>
+
+      <section className="mb-10">
+        <h2 className="text-3xl font-bold text-orange-400 mb-4">About Xylem</h2>
+        <p className="text-gray-200 mb-4">Xylem is a global leader in water technology, providing innovative and smart solutions to address the world’s critical water challenges. Through research, advanced engineering, and industry collaboration, Xylem enables utilities, industries, and communities to optimize water usage, reduce non-revenue water, and improve operational efficiency.</p>
+        <ul className="list-disc pl-6 text-gray-300 mb-4">
+          <li>Xylem’s portfolio spans advanced metering, water monitoring, wastewater treatment, analytics, and intelligent infrastructure solutions that help build resilient and sustainable water systems.</li>
+          <li>With a strong focus on digital transformation, Xylem integrates IoT, AI, and data-driven insights to empower utilities and industries to make informed decisions and improve service delivery.</li>
+          <li>Xylem actively collaborates with academic institutions worldwide to nurture young talent through Xylem Ignite Programs, support R&D initiatives, and encourage innovation in solving emerging water challenges.</li>
+        </ul>
+      </section>
+
+      <section className="mb-10">
+        <h2 className="text-3xl font-bold text-orange-400 mb-4">Hackathon Objectives</h2>
+        <ul className="list-disc pl-6 text-gray-300">
+          <li>Encourage students to solve real-world water industry challenges through Embedded Systems and IoT.</li>
+          <li>Foster innovation and creativity in smart water monitoring and management.</li>
+          <li>Promote industry–academia collaboration and knowledge sharing.</li>
+          <li>Provide students with hands-on experience in designing practical, scalable technological solutions.</li>
+        </ul>
+      </section>
+
+      <section className="mb-10">
+        <h2 className="text-3xl font-bold text-orange-400 mb-4">Participation Guidelines</h2>
+        <ul className="list-disc pl-6 text-gray-300">
+          <li>Teams must bring their own laptops and development environments.</li>
+          <li>Teams are responsible for software development, simulation, and prototyping logic.</li>
+          <li>Teams should prepare their own documentation and presentation materials.</li>
+          <li>Teams should ensure version control and backup of their work.</li>
+          <li>Teams must comply with event rules, timelines, and ethical usage of data.</li>
+        </ul>
+      </section>
+
+      <section className="mb-10">
+        <h2 className="text-3xl font-bold text-orange-400 mb-4">Problem Statements</h2>
+        <div className="mb-6">
+          <h3 className="text-xl font-semibold text-white mb-2">1. Energy Wastage Detection in Pump Operations</h3>
+          <p className="text-gray-300 mb-2">Design an embedded IoT solution that correlates electrical input (current/voltage) with hydraulic behavior (flow/pressure) to detect inefficient operating conditions at the edge and generate actionable alerts.</p>
+          <ul className="list-disc pl-6 text-gray-300">
+            <li>Electrical and hydraulic sensor integration</li>
+            <li>Edge-level analytics and rule-based logic</li>
+            <li>Low-latency anomaly detection</li>
+            <li>Power-efficient embedded design</li>
+          </ul>
+        </div>
+        <div className="mb-6">
+          <h3 className="text-xl font-semibold text-white mb-2">2. Real-Time Water Usage & Leak Detection Analytics for Smart Buildings</h3>
+          <p className="text-gray-300 mb-2">Develop a system that continuously analyses real-time water usage in a building to detect abnormal consumption and potential leak scenarios, enabling rapid response to prevent water loss and damage.</p>
+          <ul className="list-disc pl-6 text-gray-300">
+            <li>Detect sudden continuous high-water flow indicating a major leak (based on set duration of water flow)</li>
+            <li>Trigger emergency cutoff when a critical leak is detected</li>
+            <li>Identify continuous water usage during expected non-usage hours</li>
+            <li>Distinguish between legitimate high demand and leakage</li>
+            <li>(Optional) Enable basic demand-based pump operation, prioritizing low-usage periods</li>
+          </ul>
+        </div>
+        <div className="mb-6">
+          <h3 className="text-xl font-semibold text-white mb-2">3. Water Theft & Unauthorized Usage Detection</h3>
+          <p className="text-gray-300 mb-2">Design an embedded monitoring solution that identifies abnormal flow or pressure patterns indicative of theft or unauthorized usage and raises alerts with minimal false positives.</p>
+          <ul className="list-disc pl-6 text-gray-300">
+            <li>Flow and pressure pattern analysis</li>
+            <li>Event detection algorithms</li>
+            <li>Edge-based alert generation</li>
+            <li>Low-power continuous monitoring</li>
+          </ul>
+        </div>
+      </section>
+
+      <section className="mb-10">
+        <h2 className="text-3xl font-bold text-orange-400 mb-4">Rules & Regulations</h2>
+        <ul className="list-disc pl-6 text-gray-300">
+          <li>All participants must be currently enrolled students.</li>
+          <li>Teams must consist of 3-4 members.</li>
+          <li>Plagiarism or use of unoriginal work will result in disqualification.</li>
+          <li>Decisions of the judges and organizers are final.</li>
+          <li>Teams must submit their work before the deadline; late submissions will not be accepted.</li>
+          <li>Respect all participants, mentors, and event staff.</li>
+          <li>Any form of cheating or unethical behavior will result in immediate removal from the event.</li>
+          <li>Follow all campus and event safety protocols.</li>
+        </ul>
+      </section>
+
+      <section className="mb-10">
+        <h2 className="text-2xl font-bold text-orange-400 mb-2">Evaluation & Submission Guidelines</h2>
+        <p className="text-gray-300">All submissions will be evaluated based on innovation, technical feasibility, scalability, and presentation. Ensure your documentation is clear and your solution is well-demonstrated. Submission instructions and deadlines will be announced during the event. Late or incomplete submissions will not be considered for evaluation.</p>
+      </section>
 
       <AnimatePresence>
         {showForm && (
