@@ -95,6 +95,8 @@ export default function Page() {
     ],
     campus: '',
   })
+  const [registrationSubmitted, setRegistrationSubmitted] = useState(false)
+  const [showOverlay, setShowOverlay] = useState(false)
 
   const handleNext = () => {
     setStepError(null);
@@ -131,7 +133,6 @@ export default function Page() {
       }
     }
   };
-//
 
             const isStepValid = () => {
               switch (step) {
@@ -589,7 +590,6 @@ export default function Page() {
                         <button
                           onClick={step === 3 ? async () => {
                             setSubmitting(true);
-                            setStep(4);
                             try {
                               const filteredMembers = formData.members.filter((m) => m.name && m.name.trim());
                               const payload = {
@@ -606,13 +606,36 @@ export default function Page() {
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(payload),
                               });
-                            } catch (e) {}
+                              setRegistrationSubmitted(true);
+                              setShowOverlay(true);
+                              setTimeout(() => {
+                                setShowOverlay(false);
+                                setShowForm(false);
+                                setStep(1);
+                                setFormData({
+                                  teamName: '',
+                                  teamLeader: '',
+                                  email: '',
+                                  phone: '',
+                                  problemStatement: '',
+                                  members: [
+                                    { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [] },
+                                    { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [] },
+                                    { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [] },
+                                    { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [] }
+                                  ],
+                                  campus: '',
+                                });
+                              }, 2000);
+                            } catch (e) {
+                              toast.error('Submission failed. Please try again.');
+                            }
                             setSubmitting(false);
                           } : handleNext}
                           disabled={step === 3 ? submitting : false}
                           className="px-10 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg text-lg transition-all duration-200"
                         >
-                          Registration submitted
+                          {step === 3 ? (registrationSubmitted ? 'Registration submitted' : submitting ? 'Submitting...' : 'Submit Registration') : 'Next'}
                         </button>
                       </div>
                     </div>
@@ -622,5 +645,5 @@ export default function Page() {
             )}
           </AnimatePresence>
         </>
-      )
-    }
+      );
+}
