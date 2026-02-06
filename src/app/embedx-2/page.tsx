@@ -484,25 +484,21 @@ export default function Page() {
                                   className={`w-full p-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none ${memberErrors[index] && memberErrors[index].includes('Phone') ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'}`}
                                   required={index < 3}
                                 />
-                                {/* Semester as checkboxes */}
+                                {/* Semester as radio buttons (single select) */}
                                 <div className={`mb-2 ${memberErrors[index] && memberErrors[index].includes('Semester') ? 'ring-1 ring-red-500 rounded-md' : ''}`}>
-                                  <div className="text-sm text-gray-400 mb-2">Select semester (choose all that apply)</div>
+                                  <div className="text-sm text-gray-400 mb-2">Select semester</div>
                                   <div className="flex flex-wrap gap-2">
                                     {["2", "4", "6", "8"].map(opt => {
-                                      const checked = Array.isArray(member.semester) ? member.semester.includes(opt) : member.semester === opt;
+                                      const checked = Array.isArray(member.semester) ? member.semester[0] === opt : member.semester === opt;
                                       return (
                                         <label key={opt} className={`inline-flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer border ${checked ? 'bg-green-700 border-green-500 text-white' : 'bg-gray-800/30 border-gray-700 text-gray-200'}`}>
                                           <input
-                                            type="checkbox"
+                                            type="radio"
                                             className="hidden"
                                             checked={checked}
                                             onChange={() => {
                                               const newMembers = [...formData.members];
-                                              let curr = Array.isArray(member.semester) ? [...member.semester] : member.semester ? [member.semester] : [];
-                                              const idxIn = curr.indexOf(opt);
-                                              if (idxIn > -1) curr.splice(idxIn, 1);
-                                              else curr.push(opt);
-                                              newMembers[index] = { ...member, semester: curr };
+                                              newMembers[index] = { ...member, semester: [opt] };
                                               setFormData({ ...formData, members: newMembers });
                                             }}
                                           />
