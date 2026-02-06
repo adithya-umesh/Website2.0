@@ -475,7 +475,7 @@ export default function Page() {
                                     {["2", "4", "6", "8"].map(opt => {
                                       const checked = Array.isArray(member.semester) ? member.semester.includes(opt) : member.semester === opt;
                                       return (
-                                        <label key={opt} className={`inline-flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer ${checked ? 'bg-gray-700 border border-gray-600' : 'bg-gray-800/30 border border-gray-700'}`}>
+                                        <label key={opt} className={`inline-flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer border ${checked ? 'bg-green-700 border-green-500 text-white' : 'bg-gray-800/30 border-gray-700 text-gray-200'}`}>
                                           <input
                                             type="checkbox"
                                             className="hidden"
@@ -505,120 +505,74 @@ export default function Page() {
                                     newMembers[index] = { ...member, section: e.target.value }
                                     setFormData({ ...formData, members: newMembers })
                                   }}
-                                  className={`w-full p-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none ${memberErrors[index] && memberErrors[index].includes('Section') ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'}`}
+                                  className={`w-full px-2 py-1 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:border-green-500 focus:outline-none text-xs ${memberErrors[index] && memberErrors[index].includes('Section') ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'}`}
                                   required={index < 3}
                                 />
                                 {/* Department as checkboxes */}
                                 <div className={`mb-2 ${memberErrors[index] && memberErrors[index].includes('Department') ? 'ring-1 ring-red-500 rounded-md' : ''}`}>
                                   <div className="text-sm text-gray-400 mb-2">Select department(s)</div>
                                   <div className="flex flex-wrap gap-2">
-                                    {["CSE", "AI&ML", "ECE", "EEE", "MECH"].map(opt => {
-                                      const checked = Array.isArray(member.department) ? member.department.includes(opt) : member.department === opt;
-                                      return (
-                                        <label key={opt} className={`inline-flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer ${checked ? 'bg-gray-700 border border-gray-600' : 'bg-gray-800/30 border border-gray-700'}`}>
-                                          <input
-                                            type="checkbox"
-                                            className="hidden"
-                                            checked={checked}
-                                            onChange={() => {
-                                              const newMembers = [...formData.members];
-                                              let curr = Array.isArray(member.department) ? [...member.department] : member.department ? [member.department] : [];
-                                              const idxIn = curr.indexOf(opt);
-                                              if (idxIn > -1) curr.splice(idxIn, 1);
-                                              else curr.push(opt);
-                                              newMembers[index] = { ...member, department: curr };
-                                              setFormData({ ...formData, members: newMembers });
-                                            }}
-                                          />
-                                          <span className="text-sm text-gray-200">{opt}</span>
-                                        </label>
-                                      );
-                                    })}
+                                    { ["CSE", "AI&ML", "ECE", "EEE", "MECH"].map(opt => {
+                                        const checked = Array.isArray(member.department) ? member.department.includes(opt) : member.department === opt;
+                                        return (
+                                            <label key={opt} className={`inline-flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer border ${checked ? 'bg-green-700 border-green-500 text-white' : 'bg-gray-800/30 border-gray-700 text-gray-200'}`}>
+                                                <input
+                                                    type="checkbox"
+                                                    className="hidden"
+                                                    checked={checked}
+                                                    onChange={() => {
+                                                        const newMembers = [...formData.members];
+                                                        let curr = Array.isArray(member.department) ? [...member.department] : member.department ? [member.department] : [];
+                                                        const idxIn = curr.indexOf(opt);
+                                                        if (idxIn > -1) curr.splice(idxIn, 1);
+                                                        else curr.push(opt);
+                                                        newMembers[index] = { ...member, department: curr };
+                                                        setFormData({ ...formData, members: newMembers });
+                                                    }}
+                                                />
+                                                <span className="text-sm">{opt}</span>
+                                            </label>
+                                        );
+                                    }) }
                                   </div>
                                 </div>
                                 {/* Hostel as checkboxes */}
                                 <div className={`mb-2 ${memberErrors[index] && memberErrors[index].includes('Hostel') ? 'ring-1 ring-red-500 rounded-md' : ''}`}>
                                   <div className="text-sm text-gray-400 mb-2">Select hostel(s)</div>
                                   <div className="flex flex-wrap gap-2">
-                                    {["Amaatra Boys Hostel", "Amaatra Girls Hostel", "PES RR Boys", "PES RR Girls", "PES EC Boys"].map(opt => {
-                                      const checked = Array.isArray(member.hostel) ? member.hostel.includes(opt) : member.hostel === opt;
-                                      return (
-                                        <label key={opt} className={`inline-flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer ${checked ? 'bg-gray-700 border border-gray-600' : 'bg-gray-800/30 border border-gray-700'}`}>
-                                          <input
-                                            type="checkbox"
-                                            className="hidden"
-                                            checked={checked}
-                                            onChange={() => {
-                                              const newMembers = [...formData.members];
-                                              let curr = Array.isArray(member.hostel) ? [...member.hostel] : member.hostel ? [member.hostel] : [];
-                                              const idxIn = curr.indexOf(opt);
-                                              if (idxIn > -1) curr.splice(idxIn, 1);
-                                              else curr.push(opt);
-                                              newMembers[index] = { ...member, hostel: curr };
-                                              setFormData({ ...formData, members: newMembers });
-                                            }}
-                                          />
-                                          <span className="text-sm text-gray-200">{opt}</span>
-                                        </label>
-                                      );
-                                    })}
+                                    { ["Aryabhatta", "Ramanujan", "Visvesvaraya", "Sir M Vishweshwaraiah", "Kasturba", "Other"].map(opt => {
+                                        const checked = Array.isArray(member.hostel) ? member.hostel.includes(opt) : member.hostel === opt;
+                                        return (
+                                            <label key={opt} className={`inline-flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer border ${checked ? 'bg-green-700 border-green-500 text-white' : 'bg-gray-800/30 border-gray-700 text-gray-200'}`}>
+                                                <input
+                                                    type="checkbox"
+                                                    className="hidden"
+                                                    checked={checked}
+                                                    onChange={() => {
+                                                        const newMembers = [...formData.members];
+                                                        let curr = Array.isArray(member.hostel) ? [...member.hostel] : member.hostel ? [member.hostel] : [];
+                                                        const idxIn = curr.indexOf(opt);
+                                                        if (idxIn > -1) curr.splice(idxIn, 1);
+                                                        else curr.push(opt);
+                                                        newMembers[index] = { ...member, hostel: curr };
+                                                        setFormData({ ...formData, members: newMembers });
+                                                    }}
+                                                />
+                                                <span className="text-sm">{opt}</span>
+                                            </label>
+                                        );
+                                    }) }
                                   </div>
                                 </div>
-                                {/* Payment acknowledgement upload */}
-                                <div className="col-span-1 md:col-span-2 mt-2">
-                                  <label className="block text-sm text-gray-300 mb-2">Payment acknowledgement {index < 3 ? <span className="text-red-400">(required)</span> : <span className="text-gray-400">(required if member exists)</span>}</label>
-                                  <input
-                                    type="file"
-                                    accept="image/*,application/pdf"
-                                    onChange={async (e) => {
-                                      const file = e.target.files?.[0]
-                                      const newMembers = [...formData.members]
-                                      if (!file) {
-                                        newMembers[index] = { ...member, paymentName: undefined, paymentDataUrl: undefined }
-                                        setFormData({ ...formData, members: newMembers })
-                                        return
-                                      }
-                                      const reader = new FileReader()
-                                      reader.onload = () => {
-                                        const dataUrl = reader.result as string
-                                        newMembers[index] = { ...member, paymentName: file.name, paymentDataUrl: dataUrl }
-                                        setFormData({ ...formData, members: newMembers })
-                                      }
-                                      reader.readAsDataURL(file)
-                                    }}
-                                    className="w-full text-sm text-gray-300"
-                                  />
                                   {member.paymentName && (
                                     <div className="mt-2 text-xs text-gray-400">Selected: {member.paymentName}</div>
                                   )}
                                   {memberErrors[index] && (
                                     <div className="mt-2 text-sm text-red-400">{memberErrors[index]}</div>
                                   )}
-                                </div>
                               </div>
                             </div>
                           ))}
-                        </div>
-                      </div>
-                    )}
-                    {step === 3 && (
-                      <div>
-                        <h2 className="text-2xl font-bold text-white mb-6">Review & Confirm</h2>
-                        <div className="space-y-4 bg-gray-800/30 p-6 rounded-lg">
-                          <div><span className="text-gray-400">Team:</span> <span className="text-white">{formData.teamName}</span></div>
-                          <div><span className="text-gray-400">Leader:</span> <span className="text-white">{formData.teamLeader}</span></div>
-                          <div><span className="text-gray-400">Email:</span> <span className="text-white">{formData.email}</span></div>
-                          <div className="mt-6">
-                            <h3 className="text-white font-semibold mb-4">Team Members:</h3>
-                            {formData.members.filter(member => member.name).map((member, index) => (
-                              <div key={index} className="bg-gray-800/50 p-4 rounded-lg mb-2">
-                                <div className="text-white font-medium">{member.name} {index === 0 ? '(Leader)' : ''}</div>
-                                <div className="text-gray-400 text-sm">
-                                  SRN: {member.srn} | Email: {member.email} | Phone: {member.phone} | Sem: {member.semester} | Sec: {member.section} | Dept: {member.department} | Hostel: {member.hostel}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
                         </div>
                       </div>
                     )}
@@ -633,10 +587,32 @@ export default function Page() {
                       </button>
                       <div className="flex gap-4">
                         <button
-                          onClick={step === 3 ? undefined : handleNext}
-                          className="px-6 py-3 bg-gradient-orange text-white rounded-lg hover:shadow-lg hover:shadow-orange-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
+                          onClick={step === 3 ? async () => {
+                            setSubmitting(true);
+                            setStep(4);
+                            try {
+                              const filteredMembers = formData.members.filter((m) => m.name && m.name.trim());
+                              const payload = {
+                                teamName: formData.teamName,
+                                teamLeader: formData.teamLeader,
+                                email: formData.email,
+                                phone: formData.phone,
+                                campus: formData.campus,
+                                problemStatement: formData.problemStatement,
+                                members: filteredMembers,
+                              };
+                              await fetch('/api/embedx-2/register', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload),
+                              });
+                            } catch (e) {}
+                            setSubmitting(false);
+                          } : handleNext}
+                          disabled={step === 3 ? submitting : false}
+                          className="px-10 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg text-lg transition-all duration-200"
                         >
-                          {step === 3 ? 'Submit' : 'Next'}
+                          Registration submitted
                         </button>
                       </div>
                     </div>
