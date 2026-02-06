@@ -88,10 +88,10 @@ export default function Page() {
     phone: '',
     problemStatement: '',
     members: [
-      { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [] },
-      { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [] },
-      { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [] },
-      { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [] }
+      { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [], paymentName: '', paymentDataUrl: '' },
+      { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [], paymentName: '', paymentDataUrl: '' },
+      { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [], paymentName: '', paymentDataUrl: '' },
+      { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [], paymentName: '', paymentDataUrl: '' }
     ],
     campus: '',
   })
@@ -134,28 +134,35 @@ export default function Page() {
     }
   };
 
-            const isStepValid = () => {
-              switch (step) {
-                case 1: {
-                  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                  const phoneRegex = /^\d{10}$/;
-                  return (
-                    !!formData.teamName.trim() &&
-                    !!formData.teamLeader.trim() &&
-                    !!formData.email.trim() &&
-                    emailRegex.test(formData.email) &&
-                    !!formData.phone.trim() &&
-                    phoneRegex.test(formData.phone) &&
-                    !!formData.problemStatement.trim()
-                  );
-                }
-                case 2:
-                  // Add member validation if needed
-                  return true;
-                default:
-                  return true;
-              }
-            };
+  const isStepValid = () => {
+    switch (step) {
+      case 1: {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^\d{10}$/;
+        return (
+          !!formData.teamName.trim() &&
+          !!formData.teamLeader.trim() &&
+          !!formData.email.trim() &&
+          emailRegex.test(formData.email) &&
+          !!formData.phone.trim() &&
+          phoneRegex.test(formData.phone) &&
+          !!formData.problemStatement.trim()
+        );
+      }
+      case 2: {
+        // Validate all required member fields and payment upload
+        for (let i = 0; i < 3; i++) {
+          const m = formData.members[i];
+          if (!m.name || !m.srn || !m.email || !m.phone || !m.semester?.length || !m.section || !m.department?.length || !m.hostel?.length || !m.paymentDataUrl) {
+            return false;
+          }
+        }
+        return true;
+      }
+      default:
+        return true;
+    }
+  };
   return (
     <>
       <div className="px-4 py-12 sm:py-20">
@@ -565,12 +572,36 @@ export default function Page() {
                                     }) }
                                   </div>
                                 </div>
+                                {/* Payment upload */}
+                                <div className="mb-2">
+                                  <label className="text-sm text-gray-400 mb-2 block">Upload payment acknowledgement <span className="text-red-400">*</span></label>
+                                  <input
+                                    type="file"
+                                    accept="image/*,application/pdf"
+                                    required={index < 3}
+                                    onChange={async (e) => {
+                                      const file = e.target.files?.[0];
+                                      if (!file) return;
+                                      const reader = new FileReader();
+                                      reader.onload = (ev) => {
+                                        const newMembers = [...formData.members];
+                                        newMembers[index] = {
+                                          ...member,
+                                          paymentName: file.name,
+                                          paymentDataUrl: ev.target?.result as string,
+                                        };
+                                        setFormData({ ...formData, members: newMembers });
+                                      };
+                                      reader.readAsDataURL(file);
+                                    }}
+                                  />
                                   {member.paymentName && (
                                     <div className="mt-2 text-xs text-gray-400">Selected: {member.paymentName}</div>
                                   )}
-                                  {memberErrors[index] && (
-                                    <div className="mt-2 text-sm text-red-400">{memberErrors[index]}</div>
-                                  )}
+                                </div>
+                                {memberErrors[index] && (
+                                  <div className="mt-2 text-sm text-red-400">{memberErrors[index]}</div>
+                                )}
                               </div>
                             </div>
                           ))}
@@ -619,10 +650,10 @@ export default function Page() {
                                   phone: '',
                                   problemStatement: '',
                                   members: [
-                                    { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [] },
-                                    { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [] },
-                                    { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [] },
-                                    { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [] }
+                                    { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [], paymentName: '', paymentDataUrl: '' },
+                                    { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [], paymentName: '', paymentDataUrl: '' },
+                                    { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [], paymentName: '', paymentDataUrl: '' },
+                                    { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [], paymentName: '', paymentDataUrl: '' }
                                   ],
                                   campus: '',
                                 });
@@ -641,6 +672,44 @@ export default function Page() {
                     </div>
                   </motion.div>
                 </div>
+                {/* Review Step (Step 3) */}
+                {step === 3 && (
+                  <div className="max-w-2xl mx-auto mt-8 bg-gray-900/80 border border-gray-700 rounded-xl p-6">
+                    <h3 className="text-xl font-bold text-orange-400 mb-4">Review Your Details</h3>
+                    <div className="mb-2 text-white"><b>Team Name:</b> {formData.teamName}</div>
+                    <div className="mb-2 text-white"><b>Team Leader:</b> {formData.teamLeader}</div>
+                    <div className="mb-2 text-white"><b>Email:</b> {formData.email}</div>
+                    <div className="mb-2 text-white"><b>Phone:</b> {formData.phone}</div>
+                    <div className="mb-2 text-white"><b>Campus:</b> {formData.campus}</div>
+                    <div className="mb-2 text-white"><b>Problem Statement:</b> {formData.problemStatement}</div>
+                    <div className="mb-2 text-white font-bold mt-4">Members:</div>
+                    <ol className="list-decimal pl-6">
+                      {formData.members.filter(m => m.name && m.name.trim()).map((m, i) => (
+                        <li key={i} className="mb-2">
+                          <div><b>Name:</b> {m.name}</div>
+                          <div><b>SRN:</b> {m.srn}</div>
+                          <div><b>Email:</b> {m.email}</div>
+                          <div><b>Phone:</b> {m.phone}</div>
+                          <div><b>Semester:</b> {m.semester?.join(', ')}</div>
+                          <div><b>Section:</b> {m.section}</div>
+                          <div><b>Department:</b> {m.department?.join(', ')}</div>
+                          <div><b>Hostel:</b> {m.hostel?.join(', ')}</div>
+                          <div><b>Payment:</b> {m.paymentName ? m.paymentName : 'Not uploaded'}</div>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                )}
+                {/* Overlay on successful registration */}
+                {showOverlay && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+                    <div className="bg-white/90 rounded-2xl px-12 py-10 shadow-2xl flex flex-col items-center">
+                      <svg className="w-16 h-16 text-green-500 mb-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                      <div className="text-2xl font-bold text-green-700 mb-2">Registration Successful!</div>
+                      <div className="text-gray-700 text-lg">Thank you for registering for EmbedX 2.0</div>
+                    </div>
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
