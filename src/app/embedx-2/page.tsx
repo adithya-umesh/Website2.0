@@ -182,8 +182,7 @@ export default function Page() {
             </span>
           </h1>
           <p className="text-base sm:text-lg text-gray-300 leading-relaxed mb-10 text-center max-w-2xl mx-auto">
-            An exciting hardware and embedded systems event bringing together innovators,
-            makers, and tech enthusiasts to build cutting-edge solutions.
+            An ECE Department Hackathon
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
             <div className="bg-gray-900/50 border border-gray-700/50 rounded-lg p-4 flex items-center gap-4">
@@ -192,7 +191,7 @@ export default function Page() {
                 <h3 className="text-sm text-gray-400 mb-1">Date</h3>
                 <div className="flex items-center gap-2">
                   <p className="text-white font-semibold">21st February 2026</p>
-                  <span className="inline-block px-2 py-0.5 text-xs font-semibold bg-orange-500/20 text-orange-400 rounded-full border border-orange-500/40">8am - 5pm</span>
+                  <span className="inline-block px-2 py-0.5 text-xs font-semibold bg-orange-500/20 text-orange-400 rounded-full border border-orange-500/40">7AM - 5PM</span>
                 </div>
               </div>
             </div>
@@ -396,13 +395,17 @@ export default function Page() {
                         </div>
                         <div>
                           <label className="text-sm text-gray-300 block mb-1">Problem Statement <span className="text-red-400">*</span></label>
-                          <textarea
-                            placeholder="Which problem statement are you solving? (or describe your idea)"
+                          <select
                             value={formData.problemStatement}
                             onChange={e => setFormData({ ...formData, problemStatement: e.target.value })}
-                            className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none"
+                            className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-orange-500 focus:outline-none"
                             required
-                          />
+                          >
+                            <option value="">Select a problem statement</option>
+                            <option value="Energy Wastage Detection in Pump Operations">1. Energy Wastage Detection in Pump Operations</option>
+                            <option value="Real-Time Water Usage & Leak Detection Analytics for Smart Buildings">2. Real-Time Water Usage & Leak Detection Analytics for Smart Buildings</option>
+                            <option value="Water Theft & Unauthorized Usage Detection">3. Water Theft & Unauthorized Usage Detection</option>
+                          </select>
                         </div>
                       </div>
                     )}
