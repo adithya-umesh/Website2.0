@@ -46,9 +46,6 @@ export default function SponsorsPage() {
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">Sponsors Page</h1>
           <p className="text-lg text-gray-300 mb-6">This page is locked.<br/>Sponsor details coming soon!</p>
         </motion.div>
-            </a>
-          </div>
-        </div>
       </section>
     </PageWrapper>
   );
