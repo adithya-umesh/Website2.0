@@ -608,7 +608,7 @@ export default function Page() {
                         </div>
                       </div>
                     )}
-                    {/* Navigation Buttons */}
+                    {/* Navigation Buttons - Only 2 steps now, submit on step 2 */}
                     <div className="flex justify-between items-center mt-8">
                       <button
                         onClick={() => setStep(step - 1)}
@@ -618,88 +618,69 @@ export default function Page() {
                         Back
                       </button>
                       <div className="flex gap-4">
-                        <button
-                          onClick={step === 3 ? async () => {
-                            setSubmitting(true);
-                            try {
-                              const filteredMembers = formData.members.filter((m) => m.name && m.name.trim());
-                              const payload = {
-                                teamName: formData.teamName,
-                                teamLeader: formData.teamLeader,
-                                email: formData.email,
-                                phone: formData.phone,
-                                campus: formData.campus,
-                                problemStatement: formData.problemStatement,
-                                members: filteredMembers,
-                              };
-                              await fetch('/api/embedx-2/register', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(payload),
-                              });
-                              setRegistrationSubmitted(true);
-                              setShowOverlay(true);
-                              setTimeout(() => {
-                                setShowOverlay(false);
-                                setShowForm(false);
-                                setStep(1);
-                                setFormData({
-                                  teamName: '',
-                                  teamLeader: '',
-                                  email: '',
-                                  phone: '',
-                                  problemStatement: '',
-                                  members: [
-                                    { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [], paymentName: '', paymentDataUrl: '' },
-                                    { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [], paymentName: '', paymentDataUrl: '' },
-                                    { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [], paymentName: '', paymentDataUrl: '' },
-                                    { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [], paymentName: '', paymentDataUrl: '' }
-                                  ],
-                                  campus: '',
+                        {step === 2 ? (
+                          <button
+                            onClick={async () => {
+                              setSubmitting(true);
+                              try {
+                                const filteredMembers = formData.members.filter((m) => m.name && m.name.trim());
+                                const payload = {
+                                  teamName: formData.teamName,
+                                  teamLeader: formData.teamLeader,
+                                  email: formData.email,
+                                  phone: formData.phone,
+                                  campus: formData.campus,
+                                  problemStatement: formData.problemStatement,
+                                  members: filteredMembers,
+                                };
+                                await fetch('/api/embedx-2/register', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify(payload),
                                 });
-                              }, 2000);
-                            } catch (e) {
-                              toast.error('Submission failed. Please try again.');
-                            }
-                            setSubmitting(false);
-                          } : handleNext}
-                          disabled={step === 3 ? submitting : false}
-                          className="px-10 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg text-lg transition-all duration-200"
-                        >
-                          {step === 3 ? (registrationSubmitted ? 'Registration submitted' : submitting ? 'Submitting...' : 'Submit Registration') : 'Next'}
-                        </button>
+                                setRegistrationSubmitted(true);
+                                setShowOverlay(true);
+                                setTimeout(() => {
+                                  setShowOverlay(false);
+                                  setShowForm(false);
+                                  setStep(1);
+                                  setFormData({
+                                    teamName: '',
+                                    teamLeader: '',
+                                    email: '',
+                                    phone: '',
+                                    problemStatement: '',
+                                    members: [
+                                      { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [], paymentName: '', paymentDataUrl: '' },
+                                      { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [], paymentName: '', paymentDataUrl: '' },
+                                      { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [], paymentName: '', paymentDataUrl: '' },
+                                      { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [], paymentName: '', paymentDataUrl: '' }
+                                    ],
+                                    campus: '',
+                                  });
+                                }, 2000);
+                              } catch (e) {
+                                toast.error('Submission failed. Please try again.');
+                              }
+                              setSubmitting(false);
+                            }}
+                            disabled={submitting}
+                            className="px-10 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg text-lg transition-all duration-200"
+                          >
+                            {registrationSubmitted ? 'Registration submitted' : submitting ? 'Submitting...' : 'Submit Registration'}
+                          </button>
+                        ) : (
+                          <button
+                            onClick={handleNext}
+                            className="px-10 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg text-lg transition-all duration-200"
+                          >
+                            Next
+                          </button>
+                        )}
                       </div>
                     </div>
                   </motion.div>
                 </div>
-                {/* Review Step (Step 3) */}
-                {step === 3 && (
-                  <div className="mt-4">
-                    <h3 className="text-xl font-bold text-orange-400 mb-4">Review Your Details</h3>
-                    <div className="mb-2 text-white"><b>Team Name:</b> {formData.teamName}</div>
-                    <div className="mb-2 text-white"><b>Team Leader:</b> {formData.teamLeader}</div>
-                    <div className="mb-2 text-white"><b>Email:</b> {formData.email}</div>
-                    <div className="mb-2 text-white"><b>Phone:</b> {formData.phone}</div>
-                    <div className="mb-2 text-white"><b>Campus:</b> {formData.campus}</div>
-                    <div className="mb-2 text-white"><b>Problem Statement:</b> {formData.problemStatement}</div>
-                    <div className="mb-2 text-white font-bold mt-4">Members:</div>
-                    <ol className="list-decimal pl-6">
-                      {formData.members.filter(m => m.name && m.name.trim()).map((m, i) => (
-                        <li key={i} className="mb-2">
-                          <div><b>Name:</b> {m.name}</div>
-                          <div><b>SRN:</b> {m.srn}</div>
-                          <div><b>Email:</b> {m.email}</div>
-                          <div><b>Phone:</b> {m.phone}</div>
-                          <div><b>Semester:</b> {m.semester?.join(', ')}</div>
-                          <div><b>Section:</b> {m.section}</div>
-                          <div><b>Department:</b> {m.department?.join(', ')}</div>
-                          <div><b>Hostel:</b> {m.hostel?.join(', ')}</div>
-                          <div><b>Payment:</b> {m.paymentName ? m.paymentName : 'Not uploaded'}</div>
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-                )}
                 {/* Overlay on successful registration */}
                 {showOverlay && (
                   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
