@@ -214,7 +214,7 @@ export default function AboutPage() {
       </section>
 
       {/* Sponsors Section - Auto-scrolling Marquee */}
-      <section ref={sponsorsRef} className="py-20 px-4 overflow-hidden">
+      <section ref={sponsorsRef} className="py-10 px-4 overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <motion.h2
             initial={{ opacity: 0, y: 50 }}
@@ -314,7 +314,7 @@ export default function AboutPage() {
         </div>
       </section>
       {/* Enhanced Mission & Vision with Racing Theme */}
-      <section className="py-20 px-4 relative">
+      <section className="py-10 px-4 relative">
         {/* Robotic grid background */}
         <div className="absolute inset-0 opacity-5">
           <div className="grid grid-cols-20 grid-rows-10 h-full w-full">

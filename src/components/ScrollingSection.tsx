@@ -92,7 +92,7 @@ export default function ScrollingSection() {
   return (
     <div className="relative bg-gradient-black">
       {/* About Section */}
-      <section className="min-h-screen flex items-center justify-center px-4 py-24 md:py-32 relative">
+      <section className="min-h-screen flex items-center justify-center px-4 py-10 md:py-16 relative">
         {/* Textured Background */}
         <div className="absolute inset-0 opacity-20">
           <div 

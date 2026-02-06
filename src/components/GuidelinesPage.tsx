@@ -109,7 +109,7 @@ export default function GuidelinesPage() {
 
         {/* Digital scan lines */}
         <div className="absolute inset-0 pointer-events-none">
-          {[...Array(6)].map((_, i) => (
+      <section ref={headerRef} className="pt-10 pb-8 px-4 relative overflow-hidden">
             <motion.div
               key={i}
               className="absolute w-full h-0.5 bg-gradient-to-r from-transparent via-orange-400/20 to-transparent"

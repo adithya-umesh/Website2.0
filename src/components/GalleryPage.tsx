@@ -165,7 +165,7 @@ export default function GalleryPage() {
       <Navigation />
 
       {/* Hero Section */}
-      <section ref={headerRef} className="pt-20 pb-16 px-4 relative overflow-hidden">
+      <section ref={headerRef} className="pt-10 pb-8 px-4 relative overflow-hidden">
         {/* Subtle background decoration */}
         <div className="absolute inset-0 opacity-10 pointer-events-none">
           <svg viewBox="0 0 1200 400" className="w-full h-full">

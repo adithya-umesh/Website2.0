@@ -12,7 +12,7 @@ export default function LoadingScreen() {
     // Reset progress on mount
     setProgress(0)
     setIsComplete(false)
-    
+    // Much faster loading: 1.5s total
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
@@ -20,12 +20,11 @@ export default function LoadingScreen() {
           setIsComplete(true)
           return 100
         }
-        return prev + 2.5 // Increase by 2.5% to complete in ~4 seconds (40 intervals * 100ms)
+        return prev + 7; // 15 intervals * 100ms = 1.5s
       })
-    }, 100) // Faster progression for 4 second total
-
+    }, 100)
     return () => clearInterval(interval)
-  }, []) // Empty dependency array ensures this runs only once on mount
+  }, [])
 
   return (
     <motion.div

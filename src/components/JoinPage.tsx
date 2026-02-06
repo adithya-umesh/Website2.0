@@ -199,7 +199,7 @@ export default function JoinPage() {
       <Navigation />
       
       {/* Hero Section */}
-      <section ref={headerRef} className="pt-20 pb-16 px-4">
+      <section ref={headerRef} className="pt-10 pb-8 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <motion.h1
             initial={{ opacity: 0, y: 50 }}

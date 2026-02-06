@@ -79,10 +79,10 @@ export default function HeroSection() {
       {/* Enhanced Content Overlay */}
       <div className="relative z-20 text-center px-6 max-w-5xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="space-y-6 sm:space-y-8"
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="space-y-4 sm:space-y-6"
         >
           <motion.h1 
             className="text-3xl min-[400px]:text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-heading font-bold text-white leading-tight tracking-wide modern-title px-2"
@@ -168,18 +168,19 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.8 }}
           >
-            <Link href="/join">
+            <Link href="/embedx2">
               <motion.button
                 className="
                   group relative
-                  w-28 h-28 sm:w-32 sm:h-32
-                  rounded-full
+                  w-44 h-16 sm:w-56 sm:h-20
+                  rounded-2xl
                   bg-gradient-to-br from-orange-500 via-orange-600 to-red-600
                   text-white font-bold
                   flex items-center justify-center
-                  uppercase tracking-wider text-sm sm:text-base
+                  uppercase tracking-wider text-lg sm:text-2xl
                   shadow-[0_0_40px_rgba(249,115,22,0.45)]
                   overflow-hidden
+                  transition-transform duration-300 hover:scale-105
                 "
                 whileHover={{
                   scale: 1.08,
@@ -187,26 +188,17 @@ export default function HeroSection() {
                 }}
                 whileTap={{ scale: 0.95 }}
               >
-                {/* Outer ignition ring */}
-                <div className="absolute inset-0 rounded-full border-4 border-white/20" />
-
-                {/* Rotating glow ring */}
-                <motion.div
-                  className="absolute inset-2 rounded-full border border-white/30"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                />
-
+                {/* Outer border ring */}
+                <div className="absolute inset-0 rounded-2xl border-4 border-white/20" />
                 {/* Pulse glow */}
                 <motion.div
-                  className="absolute inset-0 rounded-full bg-white/10"
+                  className="absolute inset-0 rounded-2xl bg-white/10"
                   animate={{ opacity: [0.1, 0.25, 0.1] }}
                   transition={{ duration: 2.5, repeat: Infinity }}
                 />
-
                 {/* Text */}
                 <span className="relative z-10 text-center leading-tight">
-                  Start<br />Engine
+                  Register Now
                 </span>
               </motion.button>
             </Link>

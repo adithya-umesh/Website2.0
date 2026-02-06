@@ -33,11 +33,19 @@ const sponsors = [
 
 export default function SponsorsPage() {
   return (
-    <PageWrapper variant="hero" className="min-h-screen bg-gradient-black">
+    <PageWrapper variant="hero" className="min-h-screen bg-gradient-black flex flex-col">
       <Navigation />
-      <section className="pt-24 pb-20 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <motion.h1
+      <section className="flex-1 flex flex-col justify-center items-center px-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-center"
+        >
+          <div className="text-6xl mb-6">🔒</div>
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">Sponsors Page</h1>
+          <p className="text-lg text-gray-300 mb-6">This page is locked.<br/>Sponsor details coming soon!</p>
+        </motion.div>
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
