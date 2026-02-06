@@ -674,7 +674,7 @@ export default function Page() {
                 </div>
                 {/* Review Step (Step 3) */}
                 {step === 3 && (
-                  <div className="max-w-2xl mx-auto mt-8 bg-gray-900/80 border border-gray-700 rounded-xl p-6">
+                  <div className="mt-4">
                     <h3 className="text-xl font-bold text-orange-400 mb-4">Review Your Details</h3>
                     <div className="mb-2 text-white"><b>Team Name:</b> {formData.teamName}</div>
                     <div className="mb-2 text-white"><b>Team Leader:</b> {formData.teamLeader}</div>
