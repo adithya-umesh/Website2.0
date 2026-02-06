@@ -318,7 +318,280 @@ export default function Page() {
                     transition={{ duration: 0.5 }}
                   >
                     <h2 className="text-2xl font-bold text-white mb-6">Registration Form</h2>
-                    <p className="text-gray-300">Form content goes here</p>
+                    {/* Stepper indicator */}
+                    <div className="flex items-center justify-center gap-4 mb-8">
+                      {[1, 2, 3].map((s) => (
+                        <div key={s} className={`w-8 h-8 flex items-center justify-center rounded-full font-bold text-lg border-2 transition-all duration-200 ${step === s ? 'bg-orange-500 text-white border-orange-400 scale-110' : 'bg-gray-800 text-gray-400 border-gray-600'}`}>{s}</div>
+                      ))}
+                    </div>
+                    {stepError && (
+                      <div className="p-3 bg-red-900/50 border border-red-700 text-red-200 rounded-md mb-4">{stepError}</div>
+                    )}
+                    {step === 1 && (
+                      <div className="space-y-4">
+                        <div>
+                          <label className="text-sm text-gray-300 block mb-1">Team Name <span className="text-red-400">*</span></label>
+                          <input
+                            type="text"
+                            placeholder="Team Name"
+                            value={formData.teamName}
+                            onChange={e => setFormData({ ...formData, teamName: e.target.value })}
+                            className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none"
+                            required
+                          />
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-sm text-gray-300 block mb-1">Team Leader Name <span className="text-red-400">*</span></label>
+                            <input
+                              type="text"
+                              placeholder="Team Leader Name"
+                              value={formData.teamLeader}
+                              onChange={e => setFormData({ ...formData, teamLeader: e.target.value })}
+                              className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none"
+                              required
+                            />
+                          </div>
+                          <select
+                            value={formData.campus || ''}
+                            onChange={e => setFormData({ ...formData, campus: e.target.value })}
+                            className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white"
+                          >
+                            <option value="">Select Campus (EC / RR)</option>
+                            <option value="EC">EC</option>
+                            <option value="RR">RR</option>
+                          </select>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-sm text-gray-300 block mb-1">Email <span className="text-red-400">*</span></label>
+                            <input
+                              type="email"
+                              placeholder="Email"
+                              value={formData.email}
+                              onChange={e => setFormData({ ...formData, email: e.target.value })}
+                              className={`w-full p-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none ${stepError && /email/i.test(stepError) ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'}`}
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="text-sm text-gray-300 block mb-1">Phone Number <span className="text-red-400">*</span></label>
+                            <input
+                              type="tel"
+                              placeholder="Phone Number"
+                              value={formData.phone}
+                              onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                              className={`w-full p-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none ${stepError && /phone/i.test(stepError) ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'}`}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="text-sm text-gray-300 block mb-1">Problem Statement <span className="text-red-400">*</span></label>
+                          <textarea
+                            placeholder="Which problem statement are you solving? (or describe your idea)"
+                            value={formData.problemStatement}
+                            onChange={e => setFormData({ ...formData, problemStatement: e.target.value })}
+                            className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none"
+                            required
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {step === 2 && (
+                      <div>
+                        <div className="mb-6">
+                          <h3 className="text-white font-semibold mb-3">Payment instructions</h3>
+                          <p className="text-gray-400 text-sm mb-3">Please take a screenshot of your payment/acknowledgement. Upload each member's payment below. Example screenshots:</p>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <img src="/images/Payment1.png" alt="Payment example 1" className="w-full rounded-lg border border-gray-700" />
+                            <img src="/images/Payment2.png" alt="Payment example 2" className="w-full rounded-lg border border-gray-700" />
+                            <img src="/images/Payment3.png" alt="Payment example 3" className="w-full rounded-lg border border-gray-700" />
+                          </div>
+                        </div>
+                        <h2 className="text-2xl font-bold text-white mb-6">Member Details (Team size: 3-4)</h2>
+                        <p className="text-gray-400 text-sm mb-6">
+                          🏁 Provide details for each team member. Minimum 3 members required (including team leader). Up to 4 members allowed.
+                        </p>
+                        <div className="space-y-6">
+                          {formData.members.map((member, index) => (
+                            <div key={index} className="bg-gray-800/30 p-4 rounded-lg border border-gray-700">
+                              <h3 className="text-white font-semibold mb-4">
+                                Member {index + 1} {index === 0 ? '(Team Leader)' : (index < 3 ? '(Required)' : '(Optional)')} {index < 3 && <span className="text-red-400">*</span>}
+                              </h3>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input
+                                  type="text"
+                                  placeholder="Full Name"
+                                  value={member.name}
+                                  onChange={e => {
+                                    const newMembers = [...formData.members]
+                                    newMembers[index] = { ...member, name: e.target.value }
+                                    setFormData({ ...formData, members: newMembers })
+                                  }}
+                                  className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none"
+                                  required={index < 3}
+                                />
+                                <input
+                                  type="text"
+                                  placeholder="SRN"
+                                  value={member.srn}
+                                  onChange={e => {
+                                    const newMembers = [...formData.members]
+                                    newMembers[index] = { ...member, srn: e.target.value }
+                                    setFormData({ ...formData, members: newMembers })
+                                  }}
+                                  className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none"
+                                  required={index < 3}
+                                />
+                                <input
+                                  type="email"
+                                  placeholder="Email ID"
+                                  value={member.email}
+                                  onChange={e => {
+                                    const newMembers = [...formData.members]
+                                    newMembers[index] = { ...member, email: e.target.value }
+                                    setFormData({ ...formData, members: newMembers })
+                                  }}
+                                  className={`w-full p-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none ${memberErrors[index] && memberErrors[index].includes('Email') ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'}`}
+                                  required={index < 3}
+                                />
+                                <input
+                                  type="tel"
+                                  placeholder="Phone Number"
+                                  value={member.phone}
+                                  onChange={e => {
+                                    const newMembers = [...formData.members]
+                                    newMembers[index] = { ...member, phone: e.target.value }
+                                    setFormData({ ...formData, members: newMembers })
+                                  }}
+                                  className={`w-full p-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none ${memberErrors[index] && memberErrors[index].includes('Phone') ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'}`}
+                                  required={index < 3}
+                                />
+                                <input
+                                  type="text"
+                                  placeholder="Semester"
+                                  value={member.semester}
+                                  onChange={e => {
+                                    const newMembers = [...formData.members]
+                                    newMembers[index] = { ...member, semester: e.target.value }
+                                    setFormData({ ...formData, members: newMembers })
+                                  }}
+                                  className={`w-full p-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none ${memberErrors[index] && memberErrors[index].includes('Semester') ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'}`}
+                                  required={index < 3}
+                                />
+                                <input
+                                  type="text"
+                                  placeholder="Section (e.g., A)"
+                                  value={member.section}
+                                  onChange={e => {
+                                    const newMembers = [...formData.members]
+                                    newMembers[index] = { ...member, section: e.target.value }
+                                    setFormData({ ...formData, members: newMembers })
+                                  }}
+                                  className={`w-full p-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none ${memberErrors[index] && memberErrors[index].includes('Section') ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'}`}
+                                  required={index < 3}
+                                />
+                                <input
+                                  type="text"
+                                  placeholder="Department"
+                                  value={member.department || ''}
+                                  onChange={e => {
+                                    const newMembers = [...formData.members]
+                                    newMembers[index] = { ...member, department: e.target.value }
+                                    setFormData({ ...formData, members: newMembers })
+                                  }}
+                                  className={`w-full p-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none ${memberErrors[index] && memberErrors[index].includes('Department') ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'}`}
+                                  required={index < 3}
+                                />
+                                <input
+                                  type="text"
+                                  placeholder="Hostel (Hostelite/Day Scholar)"
+                                  value={member.hostel || ''}
+                                  onChange={e => {
+                                    const newMembers = [...formData.members]
+                                    newMembers[index] = { ...member, hostel: e.target.value }
+                                    setFormData({ ...formData, members: newMembers })
+                                  }}
+                                  className={`w-full p-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none ${memberErrors[index] && memberErrors[index].includes('Hostel') ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'}`}
+                                  required={index < 3}
+                                />
+                                {/* Payment acknowledgement upload */}
+                                <div className="col-span-1 md:col-span-2 mt-2">
+                                  <label className="block text-sm text-gray-300 mb-2">Payment acknowledgement {index < 3 ? <span className="text-red-400">(required)</span> : <span className="text-gray-400">(required if member exists)</span>}</label>
+                                  <input
+                                    type="file"
+                                    accept="image/*,application/pdf"
+                                    onChange={async (e) => {
+                                      const file = e.target.files?.[0]
+                                      const newMembers = [...formData.members]
+                                      if (!file) {
+                                        newMembers[index] = { ...member, paymentName: undefined, paymentDataUrl: undefined }
+                                        setFormData({ ...formData, members: newMembers })
+                                        return
+                                      }
+                                      const reader = new FileReader()
+                                      reader.onload = () => {
+                                        const dataUrl = reader.result as string
+                                        newMembers[index] = { ...member, paymentName: file.name, paymentDataUrl: dataUrl }
+                                        setFormData({ ...formData, members: newMembers })
+                                      }
+                                      reader.readAsDataURL(file)
+                                    }}
+                                    className="w-full text-sm text-gray-300"
+                                  />
+                                  {member.paymentName && (
+                                    <div className="mt-2 text-xs text-gray-400">Selected: {member.paymentName}</div>
+                                  )}
+                                  {memberErrors[index] && (
+                                    <div className="mt-2 text-sm text-red-400">{memberErrors[index]}</div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {step === 3 && (
+                      <div>
+                        <h2 className="text-2xl font-bold text-white mb-6">Review & Confirm</h2>
+                        <div className="space-y-4 bg-gray-800/30 p-6 rounded-lg">
+                          <div><span className="text-gray-400">Team:</span> <span className="text-white">{formData.teamName}</span></div>
+                          <div><span className="text-gray-400">Leader:</span> <span className="text-white">{formData.teamLeader}</span></div>
+                          <div><span className="text-gray-400">Email:</span> <span className="text-white">{formData.email}</span></div>
+                          <div className="mt-6">
+                            <h3 className="text-white font-semibold mb-4">Team Members:</h3>
+                            {formData.members.filter(member => member.name).map((member, index) => (
+                              <div key={index} className="bg-gray-800/50 p-4 rounded-lg mb-2">
+                                <div className="text-white font-medium">{member.name} {index === 0 ? '(Leader)' : ''}</div>
+                                <div className="text-gray-400 text-sm">
+                                  SRN: {member.srn} | Email: {member.email} | Phone: {member.phone} | Sem: {member.semester} | Sec: {member.section} | Dept: {member.department} | Hostel: {member.hostel}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {/* Navigation Buttons */}
+                    <div className="flex justify-between items-center mt-8">
+                      <button
+                        onClick={() => setStep(step - 1)}
+                        disabled={step === 1}
+                        className="px-6 py-3 border border-gray-600 text-gray-400 rounded-lg hover:text-white hover:border-gray-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Back
+                      </button>
+                      <div className="flex gap-4">
+                        <button
+                          onClick={step === 3 ? undefined : handleNext}
+                          className="px-6 py-3 bg-gradient-orange text-white rounded-lg hover:shadow-lg hover:shadow-orange-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
+                        >
+                          {step === 3 ? 'Submit' : 'Next'}
+                        </button>
+                      </div>
+                    </div>
                   </motion.div>
                 </div>
               </motion.div>
