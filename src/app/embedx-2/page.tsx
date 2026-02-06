@@ -11,10 +11,10 @@ interface Member {
   srn: string;
   email: string;
   phone: string;
-  semester: string;
+  semester: string[];
   section: string;
-  department?: string;
-  hostel?: string;
+  department?: string[];
+  hostel?: string[];
   paymentName?: string;
   paymentDataUrl?: string;
 }
@@ -88,10 +88,10 @@ export default function Page() {
     phone: '',
     problemStatement: '',
     members: [
-      { name: '', srn: '', email: '', phone: '', semester: '', section: '' },
-      { name: '', srn: '', email: '', phone: '', semester: '', section: '' },
-      { name: '', srn: '', email: '', phone: '', semester: '', section: '' },
-      { name: '', srn: '', email: '', phone: '', semester: '', section: '' }
+      { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [] },
+      { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [] },
+      { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [] },
+      { name: '', srn: '', email: '', phone: '', semester: [], section: '', department: [], hostel: [] }
     ],
     campus: '',
   })
@@ -468,18 +468,34 @@ export default function Page() {
                                   className={`w-full p-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none ${memberErrors[index] && memberErrors[index].includes('Phone') ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'}`}
                                   required={index < 3}
                                 />
-                                <input
-                                  type="text"
-                                  placeholder="Semester"
-                                  value={member.semester}
-                                  onChange={e => {
-                                    const newMembers = [...formData.members]
-                                    newMembers[index] = { ...member, semester: e.target.value }
-                                    setFormData({ ...formData, members: newMembers })
-                                  }}
-                                  className={`w-full p-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none ${memberErrors[index] && memberErrors[index].includes('Semester') ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'}`}
-                                  required={index < 3}
-                                />
+                                {/* Semester as checkboxes */}
+                                <div className={`mb-2 ${memberErrors[index] && memberErrors[index].includes('Semester') ? 'ring-1 ring-red-500 rounded-md' : ''}`}>
+                                  <div className="text-sm text-gray-400 mb-2">Select semester (choose all that apply)</div>
+                                  <div className="flex flex-wrap gap-2">
+                                    {["2", "4", "6", "8"].map(opt => {
+                                      const checked = Array.isArray(member.semester) ? member.semester.includes(opt) : member.semester === opt;
+                                      return (
+                                        <label key={opt} className={`inline-flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer ${checked ? 'bg-gray-700 border border-gray-600' : 'bg-gray-800/30 border border-gray-700'}`}>
+                                          <input
+                                            type="checkbox"
+                                            className="hidden"
+                                            checked={checked}
+                                            onChange={() => {
+                                              const newMembers = [...formData.members];
+                                              let curr = Array.isArray(member.semester) ? [...member.semester] : member.semester ? [member.semester] : [];
+                                              const idxIn = curr.indexOf(opt);
+                                              if (idxIn > -1) curr.splice(idxIn, 1);
+                                              else curr.push(opt);
+                                              newMembers[index] = { ...member, semester: curr };
+                                              setFormData({ ...formData, members: newMembers });
+                                            }}
+                                          />
+                                          <span className="text-sm text-gray-200">{opt}</span>
+                                        </label>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
                                 <input
                                   type="text"
                                   placeholder="Section (e.g., A)"
@@ -492,30 +508,62 @@ export default function Page() {
                                   className={`w-full p-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none ${memberErrors[index] && memberErrors[index].includes('Section') ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'}`}
                                   required={index < 3}
                                 />
-                                <input
-                                  type="text"
-                                  placeholder="Department"
-                                  value={member.department || ''}
-                                  onChange={e => {
-                                    const newMembers = [...formData.members]
-                                    newMembers[index] = { ...member, department: e.target.value }
-                                    setFormData({ ...formData, members: newMembers })
-                                  }}
-                                  className={`w-full p-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none ${memberErrors[index] && memberErrors[index].includes('Department') ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'}`}
-                                  required={index < 3}
-                                />
-                                <input
-                                  type="text"
-                                  placeholder="Hostel (Hostelite/Day Scholar)"
-                                  value={member.hostel || ''}
-                                  onChange={e => {
-                                    const newMembers = [...formData.members]
-                                    newMembers[index] = { ...member, hostel: e.target.value }
-                                    setFormData({ ...formData, members: newMembers })
-                                  }}
-                                  className={`w-full p-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none ${memberErrors[index] && memberErrors[index].includes('Hostel') ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'}`}
-                                  required={index < 3}
-                                />
+                                {/* Department as checkboxes */}
+                                <div className={`mb-2 ${memberErrors[index] && memberErrors[index].includes('Department') ? 'ring-1 ring-red-500 rounded-md' : ''}`}>
+                                  <div className="text-sm text-gray-400 mb-2">Select department(s)</div>
+                                  <div className="flex flex-wrap gap-2">
+                                    {["CSE", "AI&ML", "ECE", "EEE", "MECH"].map(opt => {
+                                      const checked = Array.isArray(member.department) ? member.department.includes(opt) : member.department === opt;
+                                      return (
+                                        <label key={opt} className={`inline-flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer ${checked ? 'bg-gray-700 border border-gray-600' : 'bg-gray-800/30 border border-gray-700'}`}>
+                                          <input
+                                            type="checkbox"
+                                            className="hidden"
+                                            checked={checked}
+                                            onChange={() => {
+                                              const newMembers = [...formData.members];
+                                              let curr = Array.isArray(member.department) ? [...member.department] : member.department ? [member.department] : [];
+                                              const idxIn = curr.indexOf(opt);
+                                              if (idxIn > -1) curr.splice(idxIn, 1);
+                                              else curr.push(opt);
+                                              newMembers[index] = { ...member, department: curr };
+                                              setFormData({ ...formData, members: newMembers });
+                                            }}
+                                          />
+                                          <span className="text-sm text-gray-200">{opt}</span>
+                                        </label>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                                {/* Hostel as checkboxes */}
+                                <div className={`mb-2 ${memberErrors[index] && memberErrors[index].includes('Hostel') ? 'ring-1 ring-red-500 rounded-md' : ''}`}>
+                                  <div className="text-sm text-gray-400 mb-2">Select hostel(s)</div>
+                                  <div className="flex flex-wrap gap-2">
+                                    {["Amaatra Boys Hostel", "Amaatra Girls Hostel", "PES RR Boys", "PES RR Girls", "PES EC Boys"].map(opt => {
+                                      const checked = Array.isArray(member.hostel) ? member.hostel.includes(opt) : member.hostel === opt;
+                                      return (
+                                        <label key={opt} className={`inline-flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer ${checked ? 'bg-gray-700 border border-gray-600' : 'bg-gray-800/30 border border-gray-700'}`}>
+                                          <input
+                                            type="checkbox"
+                                            className="hidden"
+                                            checked={checked}
+                                            onChange={() => {
+                                              const newMembers = [...formData.members];
+                                              let curr = Array.isArray(member.hostel) ? [...member.hostel] : member.hostel ? [member.hostel] : [];
+                                              const idxIn = curr.indexOf(opt);
+                                              if (idxIn > -1) curr.splice(idxIn, 1);
+                                              else curr.push(opt);
+                                              newMembers[index] = { ...member, hostel: curr };
+                                              setFormData({ ...formData, members: newMembers });
+                                            }}
+                                          />
+                                          <span className="text-sm text-gray-200">{opt}</span>
+                                        </label>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
                                 {/* Payment acknowledgement upload */}
                                 <div className="col-span-1 md:col-span-2 mt-2">
                                   <label className="block text-sm text-gray-300 mb-2">Payment acknowledgement {index < 3 ? <span className="text-red-400">(required)</span> : <span className="text-gray-400">(required if member exists)</span>}</label>
