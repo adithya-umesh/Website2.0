@@ -8,6 +8,7 @@ import TransitionLink from './TransitionLink'
 const navItems = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about' },
+  { name: 'Sponsors', href: '/sponsors' },
   { name: 'The Crew', href: '/crew' },
   { name: 'Gallery', href: '/gallery' },
   { name: 'Join Us', href: '/join' },

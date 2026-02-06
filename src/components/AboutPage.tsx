@@ -1,10 +1,13 @@
 
 'use client'
 
-import { motion } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
-import Navigation from './Navigation'
-import PageWrapper from './PageWrapper'
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
+import Navigation from './Navigation';
+import PageWrapper from './PageWrapper';
+import DomainModal from './DomainModal';
+import { domains as domainData, type DomainData } from '@/data/domains';
 
 // Sponsors configuration
 const sponsors = [
@@ -44,15 +47,18 @@ const milestones = [
 ]
 
 export default function AboutPage() {
-  const [historyRef, historyInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  })
+  const [historyRef, historyInView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [sponsorsRef, sponsorsInView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [activeDomain, setActiveDomain] = useState<DomainData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [sponsorsRef, sponsorsInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  })
+  const handleDomainClick = (domainId: string) => {
+    const found = domainData.find((d) => d.id === domainId);
+    if (found) {
+      setActiveDomain(found);
+      setIsModalOpen(true);
+    }
+  };
 
   return (
     <PageWrapper variant="hero" className="min-h-screen bg-gradient-black">
@@ -207,6 +213,106 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Sponsors Section - Auto-scrolling Marquee */}
+      <section ref={sponsorsRef} className="py-20 px-4 overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <motion.h2
+            initial={{ opacity: 0, y: 50 }}
+            animate={sponsorsInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8 }}
+            className="text-4xl md:text-5xl font-bold text-white text-center mb-8 modern-title"
+            style={{
+              textShadow: '0 0 15px rgba(249, 115, 22, 0.5), 0 0 30px rgba(249, 115, 22, 0.3)'
+            }}
+          >
+            Our{' '}
+            <motion.span 
+              className="text-transparent bg-clip-text bg-gradient-orange"
+            >
+              Sponsors
+            </motion.span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={sponsorsInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-center text-gray-300 mb-16 max-w-3xl mx-auto modern-body text-lg"
+          >
+            We&apos;re grateful to our partners who believe in our vision and support our mission 
+            to create the next generation of innovative engineers.
+          </motion.p>
+
+          {/* Auto-scrolling sponsor logos with descriptions */}
+          <div className="relative">
+            {/* Gradient overlays for fade effect */}
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#181818] to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#181818] to-transparent z-10 pointer-events-none" />
+            {/* Scrolling container */}
+            <div className="flex overflow-hidden py-8">
+              <motion.div
+                className="flex gap-12 items-stretch"
+                animate={{
+                  x: [0, -2400],
+                }}
+                transition={{
+                  x: {
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    duration: 70,
+                    ease: "linear",
+                  },
+                }}
+              >
+                {[...sponsors, ...sponsors, ...sponsors, ...sponsors].map((sponsor, index) => (
+                  <div
+                    key={`${sponsor.name}-${index}`}
+                    className="flex-shrink-0 w-80 bg-gray-900/30 backdrop-blur-sm border border-gray-700/30 rounded-xl p-6 hover:border-orange-500/50 transition-all duration-300 group flex flex-col"
+                  >
+                    {/* Logo container */}
+                    <div className="h-32 flex items-center justify-center mb-4">
+                      <img
+                        src={sponsor.logo}
+                        alt={sponsor.name}
+                        className="max-w-full max-h-full object-contain filter md:grayscale md:group-hover:grayscale-0 transition-all duration-300 opacity-70 md:opacity-70 group-hover:opacity-100"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement
+                          target.style.display = 'none'
+                          const parent = target.parentElement
+                          if (parent) {
+                            parent.innerHTML = `<span class="text-gray-400 text-sm text-center font-medium">${sponsor.name}</span>`
+                          }
+                        }}
+                      />
+                    </div>
+                    {/* Sponsor name and description */}
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-white mb-2 group-hover:text-orange-400 transition-colors">
+                        {sponsor.name}
+                      </h3>
+                      <p className="text-gray-400 text-sm leading-relaxed">
+                        {sponsor.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={sponsorsInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="text-center mt-12"
+          >
+            <a href="/sponsors" className="group relative px-8 py-4 bg-gradient-orange text-white font-semibold rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/25">
+              <span className="relative z-10">Become a Sponsor</span>
+              <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+            </a>
+          </motion.div>
+        </div>
+      </section>
       {/* Enhanced Mission & Vision with Racing Theme */}
       <section className="py-20 px-4 relative">
         {/* Robotic grid background */}
@@ -337,17 +443,12 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
               >
-                {[
-                  { icon: '💻', domain: 'Coding' },
-                  { icon: '🏎️', domain: 'Automotives' },
-                  { icon: '💼', domain: 'Sponsorship & Finance' },
-                  { icon: '🤖', domain: 'Robotics' },
-                  { icon: '⚙️', domain: 'Operations' },
-                  { icon: '📱', domain: 'Social Media' }
-                ].map((item, index) => (
-                  <motion.div
-                    key={item.domain}
-                    className="flex items-center space-x-3 bg-gray-900/20 border border-gray-700/30 rounded-lg p-3 group/domain"
+                {domainData.map((item, index) => (
+                  <motion.button
+                    key={item.id}
+                    type="button"
+                    onClick={() => handleDomainClick(item.id)}
+                    className="flex items-center space-x-3 bg-gray-900/20 border border-gray-700/30 rounded-lg p-3 group/domain w-full text-left focus:outline-none focus:ring-2 focus:ring-orange-500"
                     whileHover={{ 
                       x: 10,
                       borderColor: 'rgba(59, 130, 246, 0.5)',
@@ -362,13 +463,15 @@ export default function AboutPage() {
                       whileHover={{ scale: 1.2, rotate: 360 }}
                       transition={{ duration: 0.3 }}
                     >
-                      {item.icon}
+                      {/* Use emoji or icon if available, fallback to first letter */}
+                      {item.icon || item.title[0]}
                     </motion.span>
                     <span className="text-gray-300 group-hover/domain:text-orange-300 transition-colors">
-                      {item.domain}
+                      {item.title}
                     </span>
-                  </motion.div>
+                  </motion.button>
                 ))}
+                <DomainModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} domain={activeDomain} />
               </motion.div>
             </motion.div>
           </div>

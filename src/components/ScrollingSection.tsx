@@ -501,6 +501,15 @@ export default function ScrollingSection() {
                 <div className="absolute inset-0 bg-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
               </button>
             </Link>
+            <Link href="/sponsors">
+              <button className="group relative px-8 py-4 border-2 border-orange-500 text-orange-500 font-semibold rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:text-white">
+                <span className="relative z-10 flex items-center space-x-2">
+                  <span>Become a Sponsor</span>
+                  <span className="text-xl">🤝</span>
+                </span>
+                <div className="absolute inset-0 bg-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+              </button>
+            </Link>
           </motion.div>
         </div>
       </section>
