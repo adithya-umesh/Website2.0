@@ -541,7 +541,7 @@ export default function Page() {
                                 <div className={`mb-2 ${memberErrors[index] && memberErrors[index].includes('Hostel') ? 'ring-1 ring-red-500 rounded-md' : ''}`}>
                                   <div className="text-sm text-gray-400 mb-2">Select hostel(s)</div>
                                   <div className="flex flex-wrap gap-2">
-                                    { ["Aryabhatta", "Ramanujan", "Visvesvaraya", "Sir M Vishweshwaraiah", "Kasturba", "Other"].map(opt => {
+                                    { ["Amaatra Boys Hostel", "Amaatra Girls Hostel", "PES RR Boys", "PES RR Girls", "PES EC Boys"].map(opt => {
                                         const checked = Array.isArray(member.hostel) ? member.hostel.includes(opt) : member.hostel === opt;
                                         return (
                                             <label key={opt} className={`inline-flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer border ${checked ? 'bg-green-700 border-green-500 text-white' : 'bg-gray-800/30 border-gray-700 text-gray-200'}`}>
