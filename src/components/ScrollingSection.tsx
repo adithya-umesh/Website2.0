@@ -265,7 +265,7 @@ export default function ScrollingSection() {
               <div className="text-4xl mb-4">🚀</div>
               <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">EmbedX 2.0</h3>
               <p className="text-base sm:text-lg text-gray-300 mb-6">
-                Hardware and embedded systems event - registrations opening soon
+                Hardware and embedded systems event - <span className="text-green-400 font-semibold">Registrations Open</span>
               </p>
               <Link href="/embedx-2">
                 <button className="px-8 py-3 bg-gradient-orange text-white font-semibold rounded-lg hover:scale-105 transition-transform duration-300">

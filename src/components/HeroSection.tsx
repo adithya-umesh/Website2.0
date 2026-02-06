@@ -168,19 +168,18 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.8 }}
           >
-            <Link href="/embedx2">
+            <Link href="/join">
               <motion.button
                 className="
                   group relative
-                  w-44 h-16 sm:w-56 sm:h-20
-                  rounded-2xl
+                  w-28 h-28 sm:w-32 sm:h-32
+                  rounded-full
                   bg-gradient-to-br from-orange-500 via-orange-600 to-red-600
                   text-white font-bold
                   flex items-center justify-center
-                  uppercase tracking-wider text-lg sm:text-2xl
+                  uppercase tracking-wider text-sm sm:text-base
                   shadow-[0_0_40px_rgba(249,115,22,0.45)]
                   overflow-hidden
-                  transition-transform duration-300 hover:scale-105
                 "
                 whileHover={{
                   scale: 1.08,
@@ -188,17 +187,23 @@ export default function HeroSection() {
                 }}
                 whileTap={{ scale: 0.95 }}
               >
-                {/* Outer border ring */}
-                <div className="absolute inset-0 rounded-2xl border-4 border-white/20" />
+                {/* Outer ignition ring */}
+                <div className="absolute inset-0 rounded-full border-4 border-white/20" />
+                {/* Rotating glow ring */}
+                <motion.div
+                  className="absolute inset-2 rounded-full border border-white/30"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                />
                 {/* Pulse glow */}
                 <motion.div
-                  className="absolute inset-0 rounded-2xl bg-white/10"
+                  className="absolute inset-0 rounded-full bg-white/10"
                   animate={{ opacity: [0.1, 0.25, 0.1] }}
                   transition={{ duration: 2.5, repeat: Infinity }}
                 />
                 {/* Text */}
                 <span className="relative z-10 text-center leading-tight">
-                  Register Now
+                  Start<br />Engine
                 </span>
               </motion.button>
             </Link>
