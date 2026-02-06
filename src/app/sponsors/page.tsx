@@ -46,39 +46,6 @@ export default function SponsorsPage() {
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">Sponsors Page</h1>
           <p className="text-lg text-gray-300 mb-6">This page is locked.<br/>Sponsor details coming soon!</p>
         </motion.div>
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-5xl md:text-7xl font-heading font-bold text-white mb-8 modern-title"
-          >
-            Our <span className="text-transparent bg-clip-text bg-gradient-orange">Sponsors</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-12"
-          >
-            We are grateful to our partners who believe in our vision and support our mission to create the next generation of innovative engineers.
-          </motion.p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {sponsors.map((sponsor) => (
-              <div key={sponsor.name} className="bg-gray-900/30 border border-gray-700/30 rounded-xl p-6 flex flex-col items-center">
-                <div className="h-24 flex items-center justify-center mb-4">
-                  <img
-                    src={sponsor.logo}
-                    alt={sponsor.name}
-                    className="max-w-full max-h-full object-contain filter grayscale hover:grayscale-0 transition-all duration-300 opacity-80 hover:opacity-100"
-                  />
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2">{sponsor.name}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{sponsor.description}</p>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-16">
-            <a href="mailto:vegavath@pes.edu" className="inline-block px-8 py-4 bg-gradient-orange text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/25">
-              Become a Sponsor
             </a>
           </div>
         </div>
