@@ -53,10 +53,9 @@ export async function POST(req: Request) {
     }
 
     if (Array.isArray(members)) {
-      for (let i = 0; i < members.length; i++) {
-        const m = members[i] as any;
-        if (!m) continue;
-        // Only upload if payment_url is not already set and paymentDataUrl exists
+      // Upload all payment files in parallel for speed
+      await Promise.all(members.map(async (m: any, i: number) => {
+        if (!m) return;
         if (!m.payment_url && m.paymentDataUrl) {
           try {
             const paymentObj = { name: m.paymentName || `payment_${i+1}`, data: m.paymentDataUrl };
@@ -66,7 +65,7 @@ export async function POST(req: Request) {
             console.warn(`Failed to upload payment for member ${i+1}:`, e);
           }
         }
-      }
+      }));
     }
 
     // Save all form data as JSON in the embedx2 bucket (bucket only, not table)
