@@ -310,18 +310,20 @@ export default function Page() {
             transition={{ duration: 0.3 }}
           >
             <div className="max-w-4xl mx-auto">
-              <motion.div
-                className="bg-gradient-to-br from-gray-900/50 to-gray-800/50 p-8 rounded-xl border border-gray-700/50 backdrop-blur-sm"
-                key={step}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                {/* ...existing registration form steps... */}
+                  <motion.div
+                    className="bg-gradient-to-br from-gray-900/50 to-gray-800/50 p-8 rounded-xl border border-gray-700/50 backdrop-blur-sm"
+                    key={step}
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <h2 className="text-2xl font-bold text-white mb-6">Registration Form</h2>
+                    <p className="text-gray-300">Form content goes here</p>
+                  </motion.div>
+                </div>
               </motion.div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  );
+            )}
+          </AnimatePresence>
+        </>
+      )
+    }
