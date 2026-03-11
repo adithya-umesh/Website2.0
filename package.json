@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node scripts/create_embedx2_table.js",
-    "start": "node scripts/ensure-embedx2.js && next start",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "db:create-hackathon-table": "node scripts/create_hackathon_table.js"
   },
